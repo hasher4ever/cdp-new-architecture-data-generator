@@ -1,0 +1,440 @@
+{
+  "tenant_id": 1749368755727,
+  "customer_fields": {
+    "customer_id": "VARCHAR_1000",
+    "external_id": "VARCHAR_1000",
+    "email": "VARCHAR_1000",
+    "phone_number": "VARCHAR_1000",
+    "first_name": "VARCHAR_1000",
+    "last_name": "VARCHAR_1000",
+    "gender": "VARCHAR_1000",
+    "date_of_birth": "DATE",
+    "location": "VARCHAR_1000",
+    "postal_code": "BIGINT",
+    "language": "VARCHAR_1000",
+    "preferred_currency": "VARCHAR_1000",
+    "registration_date": "DATE",
+    "last_login": "DATETIME",
+    "loyalty_status": "VARCHAR_1000",
+    "consent_status": "BOOL",
+    "marketing_opt_in": "BOOL"
+  },
+  "event_fields": {
+    "purchase": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "order_id": "VARCHAR_1000",
+      "total_amount": "BIGINT",
+      "payment_method": "VARCHAR_1000",
+      "items": "VARCHAR_1000",
+      "shipping_address": "VARCHAR_1000"
+    },
+    "search": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "search_term": "VARCHAR_1000",
+      "search_category": "VARCHAR_1000",
+      "results_count": "BIGINT"
+    },
+    "page_view": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "url": "VARCHAR_1000",
+      "referrer_url": "VARCHAR_1000",
+      "page_title": "VARCHAR_1000",
+      "duration": "BIGINT"
+    },
+    "logout": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "login_method": "VARCHAR_1000",
+      "success": "BOOL",
+      "ip_address": "VARCHAR_1000"
+    },
+    "login": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "login_method": "VARCHAR_1000",
+      "success": "BOOL",
+      "ip_address": "VARCHAR_1000"
+    },
+    "add_to_cart": {
+      "event_name": "VARCHAR_1000",
+      "event_timestamp": "DATETIME",
+      "user_id": "VARCHAR_1000",
+      "session_id": "VARCHAR_1000",
+      "device_type": "VARCHAR_1000",
+      "platform": "VARCHAR_1000",
+      "location": "VARCHAR_1000",
+      "product_id": "VARCHAR_1000",
+      "product_name": "VARCHAR_1000",
+      "category": "VARCHAR_1000",
+      "price": "BIGINT",
+      "currency": "VARCHAR_1000",
+      "quantity": "BIGINT",
+      "cart_id": "VARCHAR_1000"
+    }
+  },
+  "event_mappings": [
+    {
+      "event_name": "purchase",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "order_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "total_amount",
+      "field_type": "BIGINT"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "payment_method",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "items",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "purchase",
+      "field_name": "shipping_address",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "search",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "search_term",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "search_category",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "search",
+      "field_name": "results_count",
+      "field_type": "BIGINT"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "url",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "referrer_url",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "page_title",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "page_view",
+      "field_name": "duration",
+      "field_type": "BIGINT"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "login_method",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "success",
+      "field_type": "BOOL"
+    },
+    {
+      "event_name": "logout",
+      "field_name": "ip_address",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "login",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "login_method",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "login",
+      "field_name": "success",
+      "field_type": "BOOL"
+    },
+    {
+      "event_name": "login",
+      "field_name": "ip_address",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "event_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "event_timestamp",
+      "field_type": "DATETIME"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "user_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "session_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "device_type",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "platform",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "location",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "product_id",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "product_name",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "category",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "price",
+      "field_type": "BIGINT"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "currency",
+      "field_type": "VARCHAR_1000"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "quantity",
+      "field_type": "BIGINT"
+    },
+    {
+      "event_name": "add_to_cart",
+      "field_name": "cart_id",
+      "field_type": "VARCHAR_1000"
+    }
+  ]
+}
