@@ -4,6 +4,7 @@ import random
 import json
 from faker import Faker
 from datetime import datetime
+from collections import defaultdict
 
 fake = Faker()
 
@@ -83,7 +84,7 @@ for _ in range(NUM_CUSTOMERS):
         for k, v in customer.items():
             customer_field_types[k] = infer_dtype(v)
 
-with open("customers.csv", "w", newline='') as f:
+with open("../customers.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=customers[0].keys())
     writer.writeheader()
     writer.writerows(customers)
@@ -160,33 +161,43 @@ for event in events:
     fieldnames.update(event.keys())
 fieldnames = list(fieldnames)
 
-with open("events.csv", "w", newline='') as f:
+with open("../events.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(events)
 
 # Prepare event mappings
-event_mappings = []
+event_mappings = defaultdict(set)
+for event in events:
+    event_name = event.get("event_name")
+    if not event_name:
+        continue
+    for key in event.keys():
+        if key != "event_name":
+            event_mappings[event_name].add(key)
+
+# Create field definitions
+field_definitions = []
 for event_type, fields in event_field_types.items():
     for field, dtype in fields.items():
-        event_mappings.append({
-            "event_name": event_type,
-            "field_name": field,
-            "field_type": dtype
+        field_definitions.append({
+            "name": field,
+            "dtype": dtype
         })
 
-# Write variables.json
+# Create event-to-field mappings
+mappings_to_save = {
+    "fields": field_definitions,
+    "mappings": {event: list(fields) for event, fields in event_mappings.items()}
+}
+
+with open("../event_mappings.json", "w", encoding="utf-8") as f:
+    json.dump(mappings_to_save, f, indent=2)
+
+# Save variables
 variables = {
     "customer_fields": customer_field_types,
-    "event_fields": event_field_types,
-    "event_mappings": event_mappings
+    "event_fields": event_field_types
 }
-with open("variables.json", "r+", encoding="utf-8") as f:
-    try:
-        data = json.load(f)
-    except json.JSONDecodeError:
-        data = {}
-    data.update(variables)
-    f.seek(0)
-    json.dump(data, f, indent=2)
-    f.truncate()
+with open("../variables.json", "w", encoding="utf-8") as f:
+    json.dump(variables, f, indent=2)

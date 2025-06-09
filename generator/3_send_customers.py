@@ -1,10 +1,16 @@
 import csv
 import time
+import json
 import requests
 from config import BASE_URL_2, AUTH_TOKEN, DELAY_BETWEEN_REQUESTS, handle_curl_debug
 
+# Load tenant_id from tenant.json
+with open("tenant.json", encoding="utf-8") as f:
+    tenant_id = json.load(f)["tenant_id"]
+
 CSV_PATH = "customers.csv"  # or "events.csv"
-API_ENDPOINT = f"{BASE_URL_2}/cdp-ignest/ingest/tenant/{{tenant_id}}/customer"  # update path if sending events
+
+API_ENDPOINT = f"{BASE_URL_2}/cdp-ignest/ingest/tenant/{tenant_id}/customer"  # update path if sending events
 
 # Prepare headers
 headers = {"Content-Type": "application/json"}

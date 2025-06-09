@@ -6,14 +6,24 @@ from faker import Faker
 fake = Faker()
 
 # Constants
-NUM_CUSTOMERS = 50
-NUM_EVENTS = 100
+NUM_CUSTOMERS = 10
+NUM_EVENTS = 30
+NUM_PRODUCTS = 50
 EVENT_TYPES = ['add_to_cart', 'purchase', 'login', 'logout', 'page_view', 'search']
 DEVICE_TYPES = ['mobile', 'desktop', 'tablet']
 PLATFORMS = ['web', 'iOS', 'Android']
 LOYALTY_STATUSES = ['bronze', 'silver', 'gold']
-CURRENCIES = ['USD', 'EUR', 'GBP']
-PAYMENT_METHODS = ['credit_card', 'paypal', 'bank_transfer']
+CURRENCIES = ['USD', 'EUR', 'RUB']
+PAYMENT_METHODS = ['credit_card', 'debit_card','paypal', 'bank_transfer']
+
+# Shared product catalog
+products = [{
+    "product_id": str(uuid.uuid4()),
+    "product_name": fake.word().capitalize(),
+    "category": fake.word(),
+    "price": round(random.uniform(10, 500), 2),
+    "currency": random.choice(CURRENCIES)
+} for _ in range(NUM_PRODUCTS)]
 
 # Generate Customers
 customers = []
@@ -29,7 +39,7 @@ for _ in range(NUM_CUSTOMERS):
         "phone_number": fake.phone_number(),
         "first_name": fake.first_name(),
         "last_name": fake.last_name(),
-        "gender": random.choice(["Male", "Female", "Other"]),
+        "gender": random.choice(["Male", "Female"]),
         "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80).isoformat(),
         "location": f"{fake.city()}, {fake.country()}",
         "postal_code": fake.postcode(),
@@ -43,7 +53,7 @@ for _ in range(NUM_CUSTOMERS):
     })
 
 # Write Customers to CSV
-with open("customers.csv", "w", newline='') as f:
+with open("../customers.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=customers[0].keys())
     writer.writeheader()
     writer.writerows(customers)
@@ -61,21 +71,20 @@ def generate_event_data(event_name, user_id):
     }
 
     if event_name == "add_to_cart":
+        product = random.choice(products)
         base_event.update({
-            "product_id": str(uuid.uuid4()),
-            "product_name": fake.word().capitalize(),
-            "category": fake.word(),
-            "price": round(random.uniform(10, 500), 2),
+            **product,
             "quantity": random.randint(1, 5),
-            "currency": random.choice(CURRENCIES),
             "cart_id": str(uuid.uuid4())
         })
     elif event_name == "purchase":
+        items = random.sample(products, k=random.randint(1, 3))
+        total = sum(p["price"] for p in items)
         base_event.update({
             "order_id": str(uuid.uuid4()),
-            "total_amount": round(random.uniform(50, 1000), 2),
+            "total_amount": round(total, 2),
             "payment_method": random.choice(PAYMENT_METHODS),
-            "items": fake.words(nb=random.randint(1, 3)),
+            "items": ";".join(p["product_id"] for p in items),
             "shipping_address": fake.address().replace("\n", ", ")
         })
     elif event_name == "page_view":
@@ -100,17 +109,21 @@ def generate_event_data(event_name, user_id):
 
     return base_event
 
-# Generate Events
-events = [generate_event_data(random.choice(EVENT_TYPES), random.choice(customer_ids)) for _ in range(NUM_EVENTS)]
+# Generate Events (ensure customer_ids are used)
+events = []
+for _ in range(NUM_EVENTS):
+    user_id = random.choice(customer_ids)
+    event_type = random.choice(EVENT_TYPES)
+    events.append(generate_event_data(event_type, user_id))
 
-# Flatten keys
+# Gather all keys
 fieldnames = set()
 for event in events:
     fieldnames.update(event.keys())
 fieldnames = list(fieldnames)
 
 # Write Events to CSV
-with open("events.csv", "w", newline='') as f:
+with open("../events.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(events)

@@ -1,114 +1,131 @@
-import csv
-import json
 import os
-from collections import defaultdict
-from datetime import datetime, timezone
-
+import json
 import requests
 import config
-from config import handle_curl_debug
+from datetime import datetime, timezone
+from collections import defaultdict
 
-LOG_FILE = "2_register_schema.log"
+LOG_FILE = "_2_register_schema.log"
 VARIABLES_FILE = "variables.json"
+MAPPINGS_FILE = "event_mappings.json"
+TENANT_FILE = "tenant.json"
 
 
 def log_request_response(url, payload, response):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         timestamp = datetime.now(timezone.utc).isoformat()
         f.write(f"\n[{timestamp}] REQUEST to {url}\n")
-        f.write(f"Payload: {payload}\n")
+        f.write(f"Payload: {json.dumps(payload, indent=2)}\n")
         f.write(f"Response Code: {response.status_code}\n")
         f.write(f"Response Body: {response.text}\n")
 
 
+def load_tenant_id():
+    if not os.path.exists(TENANT_FILE):
+        raise FileNotFoundError(f"{TENANT_FILE} not found. Run tenant creation first.")
+    with open(TENANT_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    if "tenant_id" not in data:
+        raise KeyError(f"tenant_id not found in {TENANT_FILE}.")
+    return data["tenant_id"]
+
+
 def load_variable(key):
     if not os.path.exists(VARIABLES_FILE):
-        raise FileNotFoundError(f"{VARIABLES_FILE} not found. Run tenant creation first.")
+        raise FileNotFoundError(f"{VARIABLES_FILE} not found. Run generator first.")
     with open(VARIABLES_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
     if key not in data:
-        raise KeyError(f"{key} not found in {VARIABLES_FILE}. Run tenant creation first.")
+        raise KeyError(f"{key} not found in {VARIABLES_FILE}. Run generator first.")
     return data[key]
 
 
-def read_csv_fields(filepath: str) -> list:
-    fields = set()
-    with open(filepath, newline='', encoding='utf-8') as f:
-        for row in csv.DictReader(f):
-            for k, v in row.items():
-                if v:
-                    fields.add(k)
-    return list(fields)
+def load_mappings():
+    if not os.path.exists(MAPPINGS_FILE):
+        raise FileNotFoundError(f"{MAPPINGS_FILE} not found. Run generator first.")
+    with open(MAPPINGS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def read_event_mappings(filepath: str) -> dict:
-    mapping = defaultdict(set)
-    with open(filepath, newline='', encoding='utf-8') as f:
-        for row in csv.DictReader(f):
-            event = row.get("event_name")
-            if event:
-                for k in row.keys():
-                    if k != "event_name":
-                        mapping[event].add(k)
-    return {k: sorted(v) for k, v in mapping.items()}
-
-
-def post_field_schema(fields: list, schema: dict, endpoint: str):
-    headers = {"Content-Type": "application/json"}
-    for field in fields:
-        if field in config.SKIP_FIELDS:
-            continue
-        dtype = schema.get(field)
-        print(f"Trying to register: {field}")
-        if not dtype:
-            print(f"❌ Skipped: No dtype for field: {field}")
-            continue
-        payload = {"name": field, "dtype": dtype}
-        response = requests.post(endpoint, json=payload, headers=headers)
-        handle_curl_debug("POST", endpoint, headers, payload, response)
-        log_request_response(endpoint, payload, response)
-
-        if not response.ok:
-            print(f"❌ Failed to register field: {field}, status: {response.status_code}, response: {response.text}")
-
-
-def post_event_mappings(mapping: dict, endpoint: str):
-    headers = {"Content-Type": "application/json"}
-    payload = {"mappings": mapping}
-    response = requests.post(endpoint, json=payload, headers=headers)
-    handle_curl_debug("POST", endpoint, headers, payload, response)
-    log_request_response(endpoint, payload, response)
-
+def get_existing_fields(base_url, tenant_id):
+    url = f"{base_url}/api/tenants/{tenant_id}/info"
+    response = requests.get(url)
     if not response.ok:
-        print(f"❌ Failed to post mappings, status: {response.status_code}, response: {response.text}")
+        raise Exception(f"Failed to fetch tenant info: {response.status_code} {response.text}")
+    data = response.json()
 
+    customer_fields = {field["name"] for field in data.get("customerFields", [])}
+    event_fields = {field["name"] for field in data.get("eventFields", [])}
+    return customer_fields, event_fields
+
+
+def get_existing_event_mappings(base_url, tenant_id):
+    url = f"{base_url}/api/tenants/{tenant_id}/schema/events/field-mappings"
+    response = requests.get(url)
+    if not response.ok:
+        return {}
+    data = response.json()
+    return data.get("mappings", {})
+
+
+def post_new_customer_fields(fields, base_url, tenant_id):
+    existing_customer_fields, _ = get_existing_fields(base_url, tenant_id)
+    for field_name, field_type in fields.items():
+        if field_name in existing_customer_fields:
+            continue
+        payload = {"name": field_name, "dtype": field_type}
+        url = f"{base_url}/api/tenants/{tenant_id}/schema/customers/fields/draft"
+        response = requests.post(url, json=payload)
+        log_request_response(url, payload, response)
+        print(f"Customer field: {field_name} -> {response.status_code}")
+        assert response.ok, f"Failed to register customer field: {payload}, response: {response.text}"
+
+
+def post_new_event_fields(fields, base_url, tenant_id):
+    _, existing_event_fields = get_existing_fields(base_url, tenant_id)
+    for field in fields:
+        if field["name"] in existing_event_fields:
+            continue
+        payload = {"name": field["name"], "dtype": field["dtype"]}
+        url = f"{base_url}/api/tenants/{tenant_id}/schema/events/fields/draft"
+        response = requests.post(url, json=payload)
+        log_request_response(url, payload, response)
+        print(f"Event field: {field['name']} -> {response.status_code}")
+        assert response.ok, f"Failed to register event field: {payload}, response: {response.text}"
+
+
+def post_new_event_mappings(mappings, base_url, tenant_id):
+    existing_mappings = get_existing_event_mappings(base_url, tenant_id)
+    _, existing_event_fields = get_existing_fields(base_url, tenant_id)
+
+    # Construct mappings as an object {event_name: [field_names]}
+    new_mappings = defaultdict(list)
+    for event_name, fields in mappings.items():
+        existing_fields = set(existing_mappings.get(event_name, []))
+        # Only include fields that exist in event_fields and are not already mapped
+        new_fields = [f for f in fields if f not in existing_fields and f in existing_event_fields]
+        if new_fields:
+            new_mappings[event_name] = new_fields
+
+    if not new_mappings:
+        print("No new mappings to register.")
+        return
+
+    payload = {"mappings": dict(new_mappings)}
+    url = f"{base_url}/api/tenants/{tenant_id}/schema/events/field-mappings"
+    response = requests.post(url, json=payload)
+    log_request_response(url, payload, response)
+    print(f"Mappings POST -> {response.status_code}")
+    assert response.ok, f"Failed to post mappings: {response.text}"
 
 
 if __name__ == "__main__":
-    tenant_id = load_variable("tenant_id")
     base_url = config.BASE_URL_1
+    tenant_id = load_tenant_id()
 
+    customer_fields = load_variable("customer_fields")
+    mappings_data = load_mappings()
 
-    customer_fields = read_csv_fields(config.CUSTOMERS_CSV)
-    event_fields = read_csv_fields(config.EVENTS_CSV)
-    event_mappings = read_event_mappings(config.EVENTS_CSV)
-
-    with open("variables.json", encoding="utf-8") as f:
-        full_schema = json.load(f)
-
-    customer_schema = full_schema["customer_fields"]
-    event_schema = full_schema["event_fields"]
-
-    post_field_schema(
-        fields=list(customer_schema.keys()),
-        schema=customer_schema,
-        endpoint=f"{base_url}/api/tenants/{tenant_id}/schema/customers/fields/draft"
-    )
-
-    post_field_schema(
-        fields=list(event_schema.keys()),
-        schema=event_schema,
-        endpoint=f"{base_url}/api/tenants/{tenant_id}/schema/events/fields/draft"
-    )
-
-    post_event_mappings(event_mappings, f"{base_url}/api/tenants/{tenant_id}/schema/customers/field-mappings")
+    post_new_customer_fields(customer_fields, base_url, tenant_id)
+    post_new_event_fields(mappings_data["fields"], base_url, tenant_id)
+    post_new_event_mappings(mappings_data["mappings"], base_url, tenant_id)

@@ -5,8 +5,8 @@ import config
 import json
 import os
 
-LOG_FILE = "1_create_tenant.log"
-VARIABLES_FILE = "variables.json"
+LOG_FILE = "_1_create_tenant.log"
+TENANT_FILE = "tenant.json"
 
 def log_request_response(url, payload, response):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
@@ -18,11 +18,11 @@ def log_request_response(url, payload, response):
 
 def save_variable(key, value):
     data = {}
-    if os.path.exists(VARIABLES_FILE):
-        with open(VARIABLES_FILE, "r", encoding="utf-8") as f:
+    if os.path.exists(TENANT_FILE):
+        with open(TENANT_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
     data[key] = value
-    with open(VARIABLES_FILE, "w", encoding="utf-8") as f:
+    with open(TENANT_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
 def create_tenant():

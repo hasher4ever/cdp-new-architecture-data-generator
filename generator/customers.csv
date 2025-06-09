@@ -1,21 +1,21 @@
-customer_id,external_id,email,phone_number,first_name,last_name,gender,date_of_birth,location,postal_code,language,preferred_currency,registration_date,last_login,loyalty_status,consent_status,marketing_opt_in
-173ceb78-c82b-411e-b928-fe5c57cb3bdd,d1629294-32e5-46e7-8dae-af7a280b4285,howard46@example.com,(449)783-7694,Nicholas,Daniel,Male,1960-03-22,"Gilmorechester, Isle of Man",88581,Latin,EUR,2021-03-08,2025-05-17T13:15:54,gold,True,False
-58f57ea4-b5fb-420e-b095-63fbd8587f62,96ce8434-4f75-4466-89e4-9429f81bbf6b,bwalsh@example.com,(567)784-5675x669,Kevin,Hodge,Male,1973-08-25,"Lake Christinestad, Lebanon",38938,Xhosa,EUR,2024-12-13,2025-05-26T00:56:35,gold,False,False
-518c4b2f-7903-4c19-a5e8-20e96c15b04c,dd706957-3e7c-4daf-b05b-5e27f18b5b21,lauragarrett@example.org,+1-206-632-9878,Natasha,Wilkins,Male,1983-05-16,"South Sherry, Estonia",28683,Xhosa,RUB,2022-05-12,2025-02-24T20:27:01,silver,True,True
-357e0363-c302-4c59-a85e-19329ad826ce,8eda5e53-4304-4c80-bfbb-a6f89e4bd84e,williamskathleen@example.net,930-368-1154x63760,Bradley,Martin,Female,1977-03-05,"Adamsborough, Marshall Islands",42772,Amharic,RUB,2025-05-02,2025-01-25T14:30:27,gold,False,True
-515c80b8-daab-4e3a-a3b7-0c396fff7c01,f16abc8b-9e90-4e71-811f-3fe377624977,melanie72@example.com,486.546.6885,Eric,Barr,Female,1946-11-14,"Davismouth, Equatorial Guinea",31941,Hindi,USD,2022-07-11,2025-02-20T23:22:34,bronze,True,False
-ffbd3fc1-dd62-4d16-84b5-22ee6f5f4f15,124b7e94-2227-497c-95bb-e796c7837db5,michaeldavis@example.org,001-790-959-5019x22325,Tammy,Mueller,Female,1968-02-17,"East Ashley, Hong Kong",82357,Breton,RUB,2020-06-18,2025-04-15T22:21:05,bronze,True,False
-91f51958-3253-44c9-b382-cc9419cc1037,d0a14040-a889-4082-9540-e9f405ed0978,eric94@example.net,+1-875-419-9482x78401,John,Williams,Female,1960-06-19,"Port April, French Guiana",59601,Komi,RUB,2023-10-29,2025-01-05T02:54:15,silver,False,True
-4aea4c7e-9620-49ce-9ea6-36e88b25db88,8e687119-a22d-45d9-93f6-459d49e85897,tolson@example.com,8873083323,Teresa,Singleton,Male,1951-01-10,"Larsenton, Tuvalu",44571,Burmese,RUB,2024-01-14,2025-05-14T19:52:05,gold,False,True
-56eec803-90e7-43f2-8ecf-892cef7bea35,949cf810-3046-4a63-8627-a53b7115fdeb,perezmeredith@example.net,(510)570-2606,Melissa,Bradley,Female,1993-10-29,"Raymouth, Palestinian Territory",04183,Telugu,USD,2021-03-19,2025-04-07T11:24:05,gold,False,True
-e0341cbe-23d7-40d1-8b03-e47b976143d3,dfc76af3-e3d1-48b4-8433-83f8f863739f,jimenezhailey@example.com,879-610-4836x2145,Frederick,Houston,Male,2002-10-20,"South Heather, United States Virgin Islands",53721,Tahitian,EUR,2024-10-25,2025-05-19T22:42:15,bronze,False,False
-11fe3a67-3b77-4afd-a732-ada600e3bb83,f2acffae-b468-4c12-ba9e-5a3251ab8d84,dnorman@example.net,(484)261-5633x094,Monica,Johnson,Male,1955-03-10,"New Robertmouth, Holy See (Vatican City State)",69572,Ido,USD,2024-08-21,2025-03-25T20:53:17,bronze,True,True
-9b20440d-7f0b-4ce0-885d-e441cb387d91,908e5ead-53b7-4b40-b541-c0f71fb83008,greenjill@example.com,001-806-464-1878x538,Sarah,Hayes,Male,1986-04-15,"Lake Amy, Djibouti",86622,Albanian,RUB,2023-03-04,2025-01-15T15:27:40,bronze,False,True
-be6563a4-55a8-4ade-b1f9-ee2425f4be72,d401e490-d0fa-4131-9d98-8c8bc47cc2f0,mosscassie@example.org,227-875-8861,Jacob,Green,Male,1956-03-02,"Patriciachester, Sweden",52142,Rundi,EUR,2022-04-01,2025-02-19T09:52:08,gold,False,True
-ad104998-6cb2-40d1-8111-b4862731ed77,53848af8-5fe1-43a7-904e-65546d9117e0,davidlane@example.com,(344)280-7001,Ethan,Ayala,Female,1993-04-21,"Underwoodshire, Korea",74565,Aragonese,RUB,2020-09-30,2025-01-19T18:32:04,silver,True,False
-b0baa9f7-7481-4c20-b7b3-3d8a72f74ac1,c3faf313-76f0-4ead-b8eb-0785440ffab3,anthony43@example.com,263-243-5403,Jermaine,Lopez,Female,1955-04-10,"South Amberchester, Bouvet Island (Bouvetoya)",22344,Malayalam,EUR,2025-01-07,2025-05-02T03:40:49,bronze,False,False
-e6faaeb2-234b-4a07-a9a9-c596462a08de,fd7e9654-b5a7-4e4e-b58c-4901312e5bcc,kurtjohnson@example.net,276.651.0709x252,Joseph,Hunter,Male,1960-09-15,"Port Darrylchester, Egypt",01468,Russian,RUB,2022-08-11,2025-02-09T03:43:53,bronze,False,True
-b034174e-b4ba-4fdd-9e06-6ad4fec64ff3,d4242029-288f-4ace-9f8d-fb16e9a54f9e,patrickduffy@example.com,+1-764-520-8446x854,Cynthia,Crosby,Female,1971-02-15,"East Markville, Colombia",10767,Marathi,EUR,2024-08-12,2025-04-18T17:37:57,silver,False,False
-0f6955d3-442e-4327-a075-d53f16dd4991,000b3e72-f7eb-4f79-8911-fed3e58a77c5,sarahirwin@example.com,661.620.7040x84299,Jason,Martin,Female,1955-01-12,"Port Franciscoton, Bulgaria",20548,Maltese,USD,2024-05-15,2025-05-19T11:01:10,gold,True,False
-1e6340aa-df68-4297-9da4-503791718a51,6ec720a8-9339-4116-abaf-27d2139870aa,cindypayne@example.org,001-256-419-0411x76489,Joseph,Richards,Female,1983-04-14,"East Jill, British Virgin Islands",97785,Pali,USD,2020-10-07,2025-05-07T10:34:50,silver,True,True
-df7e285d-08f8-4c44-a277-457a56c5a81a,d08e8bad-dcb8-419b-a086-d00d12951ade,johnsonjames@example.org,001-612-863-4347x5323,Matthew,Miller,Female,1961-05-06,"Lake Sarah, Malta",63379,Slovenian,EUR,2022-04-26,2025-05-10T03:25:30,bronze,True,False
+birth_date,first_name,gender,last_name,primary_id
+1944-11-22,Michael,Other,,722034
+1986-03-15,,,Griffin,133195
+1973-02-17,Amanda,Male,Johnson,981693
+1961-06-29,Erica,Male,Griffin,115769
+,Dustin,,,808308
+1966-12-31,,Male,,244537
+,Bradley,Female,,238461
+1998-03-18,Lisa,,Simon,721982
+,Alan,,Wallace,520906
+1994-05-06,Sarah,,,555147
+2004-11-13,Charles,Female,Humphrey,824394
+1947-12-28,Amber,Male,Johnson,402162
+1977-09-21,Theresa,Male,Whitaker,516414
+,Thomas,Female,Robinson,143422
+1976-10-07,Judith,Other,Berger,832160
+1994-03-14,,Male,Rivers,369143
+1956-11-03,Michael,Other,Wheeler,300530
+2000-06-21,John,,,260703
+1984-05-10,Jennifer,Female,Stewart,992970
+1967-11-24,,Male,Castillo,422846

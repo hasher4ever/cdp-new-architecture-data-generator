@@ -1,20 +1,47 @@
 import csv
 import uuid
 import random
+import json
 from faker import Faker
+from datetime import datetime
+from collections import defaultdict
 
 fake = Faker()
 
-# Constants
-NUM_CUSTOMERS = 10
-NUM_EVENTS = 30
-NUM_PRODUCTS = 50
+NUM_CUSTOMERS = 20
+NUM_EVENTS = 40
+NUM_PRODUCTS = 10
+
 EVENT_TYPES = ['add_to_cart', 'purchase', 'login', 'logout', 'page_view', 'search']
 DEVICE_TYPES = ['mobile', 'desktop', 'tablet']
 PLATFORMS = ['web', 'iOS', 'Android']
 LOYALTY_STATUSES = ['bronze', 'silver', 'gold']
 CURRENCIES = ['USD', 'EUR', 'RUB']
-PAYMENT_METHODS = ['credit_card', 'debit_card','paypal', 'bank_transfer']
+PAYMENT_METHODS = ['credit_card', 'debit_card', 'paypal', 'bank_transfer']
+
+def infer_dtype(value):
+    if isinstance(value, bool) or str(value).lower() in {"true", "false"}:
+        return "BOOL"
+    try:
+        int(value)
+        return "BIGINT"
+    except:
+        pass
+    try:
+        float(value)
+        return "DOUBLE"
+    except:
+        pass
+    if isinstance(value, str):
+        if "T" in value and ":" in value:
+            return "DATETIME"
+        if "-" in value:
+            try:
+                datetime.fromisoformat(value)
+                return "DATE"
+            except:
+                pass
+    return "VARCHAR_1000"
 
 # Shared product catalog
 products = [{
@@ -25,15 +52,14 @@ products = [{
     "currency": random.choice(CURRENCIES)
 } for _ in range(NUM_PRODUCTS)]
 
-# Generate Customers
+# Customers
 customers = []
 customer_ids = []
+customer_field_types = {}
 
 for _ in range(NUM_CUSTOMERS):
-    customer_id = str(uuid.uuid4())
-    customer_ids.append(customer_id)
-    customers.append({
-        "customer_id": customer_id,
+    customer = {
+        "customer_id": str(uuid.uuid4()),
         "external_id": str(uuid.uuid4()),
         "email": fake.email(),
         "phone_number": fake.phone_number(),
@@ -50,15 +76,23 @@ for _ in range(NUM_CUSTOMERS):
         "loyalty_status": random.choice(LOYALTY_STATUSES),
         "consent_status": random.choice([True, False]),
         "marketing_opt_in": random.choice([True, False])
-    })
+    }
+    customers.append(customer)
+    customer_ids.append(customer["customer_id"])
 
-# Write Customers to CSV
-with open("customers.csv", "w", newline='') as f:
+    if not customer_field_types:
+        for k, v in customer.items():
+            customer_field_types[k] = infer_dtype(v)
+
+with open("../customers.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=customers[0].keys())
     writer.writeheader()
     writer.writerows(customers)
 
-# Helper to create event-specific data
+# Events
+events = []
+event_field_types = {}  # key: event_type -> value: {field: type}
+
 def generate_event_data(event_name, user_id):
     base_event = {
         "event_name": event_name,
@@ -109,21 +143,61 @@ def generate_event_data(event_name, user_id):
 
     return base_event
 
-# Generate Events (ensure customer_ids are used)
-events = []
 for _ in range(NUM_EVENTS):
     user_id = random.choice(customer_ids)
     event_type = random.choice(EVENT_TYPES)
-    events.append(generate_event_data(event_type, user_id))
+    event = generate_event_data(event_type, user_id)
+    events.append(event)
 
-# Gather all keys
+    if event_type not in event_field_types:
+        event_field_types[event_type] = {}
+    for k, v in event.items():
+        if k not in event_field_types[event_type]:
+            event_field_types[event_type][k] = infer_dtype(v)
+
+# Write events to CSV
 fieldnames = set()
 for event in events:
     fieldnames.update(event.keys())
 fieldnames = list(fieldnames)
 
-# Write Events to CSV
-with open("events.csv", "w", newline='') as f:
+with open("../events.csv", "w", newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(events)
+
+# Prepare event mappings
+event_mappings = defaultdict(set)
+for event in events:
+    event_name = event.get("event_name")
+    if not event_name:
+        continue
+    for key in event.keys():
+        if key != "event_name":
+            event_mappings[event_name].add(key)
+
+# Create field definitions
+field_definitions = []
+for event_type, fields in event_field_types.items():
+    for field, dtype in fields.items():
+        field_definitions.append({
+            "name": field,
+            "dtype": dtype
+        })
+
+# Create event-to-field mappings
+mappings_to_save = {
+    "fields": field_definitions,
+    "mappings": {event: list(fields) for event, fields in event_mappings.items()}
+}
+
+with open("../event_mappings.json", "w", encoding="utf-8") as f:
+    json.dump(mappings_to_save, f, indent=2)
+
+# Save variables
+variables = {
+    "customer_fields": customer_field_types,
+    "event_fields": event_field_types
+}
+with open("../variables.json", "w", encoding="utf-8") as f:
+    json.dump(variables, f, indent=2)
