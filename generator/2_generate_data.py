@@ -10,9 +10,9 @@ import config
 
 fake = Faker()
 
-NUM_CUSTOMERS = 20
-NUM_EVENTS = 40
-NUM_PRODUCTS = 10
+NUM_CUSTOMERS = 50
+NUM_EVENTS = 200
+NUM_PRODUCTS = 20
 
 EVENT_TYPES = ['add_to_cart', 'purchase', 'login', 'logout', 'page_view', 'search']
 DEVICE_TYPES = ['mobile', 'desktop', 'tablet']

@@ -9,50 +9,6 @@
       "dtype": "BIGINT"
     },
     {
-      "name": "quantity",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "product_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "page_url",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
-      "dtype": "BIGINT"
-    },
-    {
       "name": "user_id",
       "dtype": "BIGINT"
     },
@@ -89,6 +45,10 @@
       "dtype": "DOUBLE"
     },
     {
+      "name": "quantity",
+      "dtype": "BIGINT"
+    },
+    {
       "name": "user_id",
       "dtype": "BIGINT"
     },
@@ -101,11 +61,31 @@
       "dtype": "VARCHAR_1000"
     },
     {
+      "name": "items",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
       "name": "quantity",
       "dtype": "BIGINT"
     },
     {
-      "name": "items",
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "product_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "session_id",
       "dtype": "VARCHAR_1000"
     },
     {
@@ -123,45 +103,65 @@
     {
       "name": "session_id",
       "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "page_url",
+      "dtype": "VARCHAR_1000"
     }
   ],
   "mappings": {
-    "add_to_cart": [
-      "product_id",
-      "session_id",
+    "login": [
       "primary_id",
+      "session_id",
+      "user_id"
+    ],
+    "search": [
+      "primary_id",
+      "session_id",
+      "user_id"
+    ],
+    "purchase": [
+      "primary_id",
+      "product_id",
       "user_id",
-      "quantity"
+      "items",
+      "quantity",
+      "amount",
+      "session_id"
+    ],
+    "add_to_cart": [
+      "primary_id",
+      "product_id",
+      "user_id",
+      "quantity",
+      "session_id"
+    ],
+    "logout": [
+      "primary_id",
+      "session_id",
+      "user_id"
     ],
     "page_view": [
       "page_url",
-      "session_id",
-      "user_id",
-      "primary_id"
-    ],
-    "search": [
-      "session_id",
-      "user_id",
-      "primary_id"
-    ],
-    "logout": [
-      "session_id",
-      "user_id",
-      "primary_id"
-    ],
-    "purchase": [
-      "product_id",
-      "items",
-      "session_id",
       "primary_id",
-      "amount",
-      "user_id",
-      "quantity"
-    ],
-    "login": [
       "session_id",
-      "user_id",
-      "primary_id"
+      "user_id"
     ]
   }
 }
