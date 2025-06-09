@@ -1,21 +1,18 @@
-# run_draft_schema.py
-
 import requests
 import json
 import config
 
+logger = config.logger
 base_url = config.BASE_URL_1
 
-# Load tenant_id from tenant.json
 with open("tenant.json") as f:
     tenant_id = json.load(f)["tenant_id"]
+logger.info(f"Loaded tenant_id: {tenant_id}")
 
-# Construct URL
 url = f"{base_url}/api/tenants/{tenant_id}/plan/apply/draft-schema"
-
-# Send POST request
+logger.info(f"Validating schema at {url}")
 response = requests.post(url)
+config.handle_curl_debug("POST", url, headers=None, data=None, response=response)
 
-# Output response
-print("Status Code:", response.status_code)
-print("Response Body:", response.text)
+logger.info(f"Status Code: {response.status_code}")
+logger.info(f"Response Body: {response.text}")

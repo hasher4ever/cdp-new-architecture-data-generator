@@ -8,11 +8,12 @@ from datetime import datetime, timezone
 from collections import defaultdict
 import config
 
+logger = config.logger
 fake = Faker()
 
-NUM_CUSTOMERS = 50
-NUM_EVENTS = 200
-NUM_PRODUCTS = 20
+NUM_CUSTOMERS = 20
+NUM_EVENTS = 40
+NUM_PRODUCTS = 10
 
 EVENT_TYPES = ['add_to_cart', 'purchase', 'login', 'logout', 'page_view', 'search']
 DEVICE_TYPES = ['mobile', 'desktop', 'tablet']
@@ -20,7 +21,6 @@ PLATFORMS = ['web', 'iOS', 'Android']
 CURRENCIES = ['USD', 'EUR', 'RUB']
 PAYMENT_METHODS = ['credit_card', 'debit_card', 'paypal', 'bank_transfer']
 
-# Define event-specific fields
 EVENT_FIELD_RULES = {
     "add_to_cart": {"primary_id", "quantity", "product_id", "user_id", "session_id", "device_type", "platform"},
     "purchase": {"primary_id", "amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method"},
@@ -44,16 +44,21 @@ def infer_dtype(value):
 
 with open("tenant.json", "r", encoding="utf-8") as f:
     tenant_id = json.load(f)["tenant_id"]
+logger.info(f"Loaded tenant_id: {tenant_id}")
 
 def get_tenant_schema(base_url, tenant_id):
     url = f"{base_url}/api/tenants/{tenant_id}/info"
+    logger.info(f"Fetching tenant schema from {url}")
     response = requests.get(url)
+    config.handle_curl_debug("GET", url, headers=None, data=None, response=response)
     if not response.ok:
+        logger.error(f"Failed to fetch tenant schema: {response.status_code} {response.text}")
         raise Exception(f"Failed to fetch tenant schema: {response.status_code} {response.text}")
     data = response.json()
     return data.get("customerFields", []), data.get("eventFields", [])
 
 customer_fields, event_fields = get_tenant_schema(config.BASE_URL_1, tenant_id)
+logger.info("Fetched tenant schema")
 
 def generate_field_value(field, event_type=None):
     field_type = field["type"]
@@ -107,6 +112,7 @@ customers = []
 customer_ids = []
 customer_field_types = {}
 
+logger.info(f"Generating {NUM_CUSTOMERS} customers")
 for _ in range(NUM_CUSTOMERS):
     customer = {}
     for field in customer_fields:
@@ -120,14 +126,17 @@ for _ in range(NUM_CUSTOMERS):
         for field in customer_fields:
             customer_field_types[field["name"]] = field["type"].replace("boolean", "BOOL").replace("bigint", "BIGINT").replace(
                 "double", "DOUBLE").replace("varchar", "VARCHAR_1000").replace("date", "DATETIME").replace("datetime", "DATETIME")
+logger.info(f"Generated {len(customers)} customers")
 
 def write_csv_with_types(data, filename, fieldnames):
+    logger.info(f"Writing data to {filename}")
     with open(filename, "w", newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in data:
             string_row = {k: "" if v is None else str(v).lower() if isinstance(v, bool) else str(v) for k, v in row.items()}
             writer.writerow(string_row)
+    logger.info(f"Completed writing to {filename}")
 
 with open("customers.csv", "w", newline='') as f:
     fieldnames = [f["name"] for f in customer_fields if f["name"] != "created_at"]
@@ -163,6 +172,7 @@ def generate_event_data(event_name, user_id):
 
     return event
 
+logger.info(f"Generating {NUM_EVENTS} events")
 for _ in range(NUM_EVENTS):
     user_id = random.choice(customer_ids) if customer_ids else random.randint(100000, 999999)
     event_type = random.choice(EVENT_TYPES)
@@ -173,6 +183,7 @@ for _ in range(NUM_EVENTS):
     for k, v in event.items():
         if k not in event_field_types[event_type]:
             event_field_types[event_type][k] = infer_dtype(v)
+logger.info(f"Generated {len(events)} events")
 
 fieldnames = set()
 for event in events:
@@ -207,13 +218,17 @@ mappings_to_save = {
     "mappings": {event: list(fields) for event, fields in event_mappings.items()}
 }
 
+logger.info("Writing event mappings to event_mappings.json")
 with open("event_mappings.json", "w", encoding="utf-8") as f:
     json.dump(mappings_to_save, f, indent=2)
+logger.info("Completed writing to event_mappings.json")
 
 variables = {
     "customer_fields": customer_field_types,
     "event_fields": event_field_types,
     "event_field_rules": {event: list(fields) for event, fields in EVENT_FIELD_RULES.items()}
 }
+logger.info("Writing variables to variables.json")
 with open("variables.json", "w", encoding="utf-8") as f:
     json.dump(variables, f, indent=2)
+logger.info("Completed writing to variables.json")

@@ -1,0 +1,246 @@
+2025-06-09 19:06:22,742 [INFO] Creating tenant: tenant-5916a26a
+2025-06-09 19:06:53,728 [INFO] Creating tenant: tenant-55f91800
+2025-06-09 19:06:54,086 [ERROR] Failed to create tenant: 500 
+2025-06-09 19:06:57,354 [INFO] Creating tenant: tenant-d6fba7a4
+2025-06-09 19:06:57,578 [ERROR] Failed to create tenant: 500 
+2025-06-09 19:07:33,983 [INFO] Creating tenant: tenant-99758a2d
+2025-06-09 19:07:34,277 [ERROR] Failed to create tenant: 500 
+2025-06-09 19:07:36,882 [INFO] Creating tenant: tenant-ccb4241b
+2025-06-09 19:07:43,185 [INFO] Saved tenant_id to tenant.json
+2025-06-09 19:07:43,185 [INFO] Tenant created: tenant-ccb4241b with ID 1749478057507
+2025-06-09 19:07:56,472 [INFO] Loaded tenant_id: 1749478057507
+2025-06-09 19:07:56,473 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:07:56,495 [INFO] Fetched tenant schema
+2025-06-09 19:07:56,495 [INFO] Generating 20 customers
+2025-06-09 19:07:56,497 [INFO] Generated 20 customers
+2025-06-09 19:07:56,497 [INFO] Writing data to customers.csv
+2025-06-09 19:07:56,498 [INFO] Completed writing to customers.csv
+2025-06-09 19:07:56,498 [INFO] Generating 40 events
+2025-06-09 19:07:56,500 [INFO] Generated 40 events
+2025-06-09 19:07:56,500 [INFO] Writing data to events.csv
+2025-06-09 19:07:56,500 [INFO] Completed writing to events.csv
+2025-06-09 19:07:56,500 [INFO] Writing event mappings to event_mappings.json
+2025-06-09 19:07:56,501 [INFO] Completed writing to event_mappings.json
+2025-06-09 19:07:56,501 [INFO] Writing variables to variables.json
+2025-06-09 19:07:56,501 [INFO] Completed writing to variables.json
+2025-06-09 19:08:03,645 [INFO] Loaded tenant_id from tenant.json
+2025-06-09 19:08:03,645 [INFO] Loaded customer_fields from variables.json
+2025-06-09 19:08:03,645 [INFO] Loaded mappings from event_mappings.json
+2025-06-09 19:08:03,646 [INFO] Fetching existing fields from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:08:03,706 [INFO] Customer field birth_date already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Customer field created_at already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Customer field first_name already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Customer field gender already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Customer field last_name already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Customer field primary_id already exists, skipping
+2025-06-09 19:08:03,706 [INFO] Fetching existing fields from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:08:03,723 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:08:03,723 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:08:03,723 [INFO] Registering event field: field
+2025-06-09 19:08:03,782 [INFO] Event field: field -> 200
+2025-06-09 19:08:03,782 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:08:03,782 [INFO] Event field amount already exists, skipping
+2025-06-09 19:08:03,782 [INFO] Event field quantity already exists, skipping
+2025-06-09 19:08:03,783 [INFO] Event field product_id already exists, skipping
+2025-06-09 19:08:03,783 [INFO] Registering event field: items
+2025-06-09 19:08:03,798 [INFO] Event field: items -> 200
+2025-06-09 19:08:03,798 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:08:03,798 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:08:03,798 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:08:03,799 [INFO] Registering event field: field
+2025-06-09 19:08:03,855 [INFO] Event field: field -> 500
+2025-06-09 19:12:50,376 [INFO] Loaded tenant_id: 1749478057507
+2025-06-09 19:12:50,377 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:12:50,399 [INFO] Fetched tenant schema
+2025-06-09 19:12:50,399 [INFO] Generating 20 customers
+2025-06-09 19:12:50,402 [INFO] Generated 20 customers
+2025-06-09 19:12:50,402 [INFO] Writing data to customers.csv
+2025-06-09 19:12:50,403 [INFO] Completed writing to customers.csv
+2025-06-09 19:12:50,403 [INFO] Generating 40 events
+2025-06-09 19:12:50,407 [INFO] Generated 40 events
+2025-06-09 19:12:50,407 [INFO] Writing data to events.csv
+2025-06-09 19:12:50,408 [INFO] Completed writing to events.csv
+2025-06-09 19:12:50,408 [INFO] Writing event mappings to event_mappings.json
+2025-06-09 19:12:50,409 [INFO] Completed writing to event_mappings.json
+2025-06-09 19:12:50,409 [INFO] Writing variables to variables.json
+2025-06-09 19:12:50,410 [INFO] Completed writing to variables.json
+2025-06-09 19:13:41,145 [INFO] Loaded tenant_id from tenant.json
+2025-06-09 19:13:41,146 [INFO] Loaded customer_fields from variables.json
+2025-06-09 19:13:41,146 [INFO] Loaded mappings from event_mappings.json
+2025-06-09 19:13:41,146 [INFO] Fetching existing fields from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:13:41,170 [INFO] Customer field birth_date already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Customer field created_at already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Customer field first_name already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Customer field gender already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Customer field last_name already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Customer field primary_id already exists, skipping
+2025-06-09 19:13:41,170 [INFO] Fetching existing fields from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:13:41,185 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field product_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field quantity already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,185 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field product_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field amount already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field quantity already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field items already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field page_url already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field event_type already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field primary_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field user_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Event field session_id already exists, skipping
+2025-06-09 19:13:41,186 [INFO] Fetching existing event mappings from http://10.0.10.140:30100/api/tenants/1749478057507/schema/events/field-mappings
+2025-06-09 19:13:41,199 [INFO] Fetched existing event mappings
+2025-06-09 19:13:41,199 [INFO] Fetching existing fields from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-09 19:13:41,216 [INFO] Loaded event_field_rules from variables.json
+2025-06-09 19:13:41,216 [INFO] Registering new event mappings
+2025-06-09 19:13:41,237 [INFO] Mappings POST -> 204
+2025-06-09 19:13:54,458 [INFO] Loaded tenant_id: 1749478057507
+2025-06-09 19:13:54,458 [INFO] Validating schema at http://10.0.10.140:30100/api/tenants/1749478057507/plan/apply/draft-schema
+2025-06-09 19:13:55,157 [INFO] Status Code: 200
+2025-06-09 19:13:55,157 [INFO] Response Body: {"ID":"f7d144d4-5a86-4b34-a23a-6b2fce369d05"}
+
+2025-06-09 19:14:00,896 [INFO] Loaded tenant_id: 1749478057507
+2025-06-09 19:14:00,896 [INFO] Reading customers from customers.csv
+2025-06-09 19:14:00,896 [INFO] Sending customer: 806681
+2025-06-09 19:14:00,911 [INFO] Response [200]: 
+2025-06-09 19:14:01,012 [INFO] Sending customer: 165058
+2025-06-09 19:14:01,021 [INFO] Response [200]: 
+2025-06-09 19:14:01,123 [INFO] Sending customer: 921542
+2025-06-09 19:14:01,133 [INFO] Response [200]: 
+2025-06-09 19:14:01,234 [INFO] Sending customer: 618895
+2025-06-09 19:14:01,245 [INFO] Response [200]: 
+2025-06-09 19:14:01,346 [INFO] Sending customer: 502228
+2025-06-09 19:14:01,357 [INFO] Response [200]: 
+2025-06-09 19:14:01,458 [INFO] Sending customer: 200389
+2025-06-09 19:14:01,474 [INFO] Response [200]: 
+2025-06-09 19:14:01,575 [INFO] Sending customer: 727947
+2025-06-09 19:14:01,586 [INFO] Response [200]: 
+2025-06-09 19:14:01,686 [INFO] Sending customer: 869890
+2025-06-09 19:14:01,697 [INFO] Response [200]: 
+2025-06-09 19:14:01,798 [INFO] Sending customer: 347969
+2025-06-09 19:14:01,810 [INFO] Response [200]: 
+2025-06-09 19:14:01,911 [INFO] Sending customer: 827156
+2025-06-09 19:14:01,922 [INFO] Response [200]: 
+2025-06-09 19:14:02,023 [INFO] Sending customer: 761354
+2025-06-09 19:14:02,033 [INFO] Response [200]: 
+2025-06-09 19:14:02,134 [INFO] Sending customer: 936533
+2025-06-09 19:14:02,144 [INFO] Response [200]: 
+2025-06-09 19:14:02,245 [INFO] Sending customer: 705603
+2025-06-09 19:14:02,260 [INFO] Response [200]: 
+2025-06-09 19:14:02,361 [INFO] Sending customer: 916201
+2025-06-09 19:14:02,372 [INFO] Response [200]: 
+2025-06-09 19:14:02,473 [INFO] Sending customer: 614017
+2025-06-09 19:14:02,482 [INFO] Response [200]: 
+2025-06-09 19:14:02,584 [INFO] Sending customer: 278943
+2025-06-09 19:14:02,594 [INFO] Response [200]: 
+2025-06-09 19:14:02,695 [INFO] Sending customer: 354651
+2025-06-09 19:14:02,708 [INFO] Response [200]: 
+2025-06-09 19:14:02,809 [INFO] Sending customer: 396192
+2025-06-09 19:14:02,820 [INFO] Response [200]: 
+2025-06-09 19:14:02,921 [INFO] Sending customer: 394593
+2025-06-09 19:14:02,932 [INFO] Response [200]: 
+2025-06-09 19:14:03,033 [INFO] Sending customer: 572634
+2025-06-09 19:14:03,044 [INFO] Response [200]: 
+2025-06-09 19:14:03,145 [INFO] Completed sending customers
+2025-06-09 19:14:05,886 [INFO] Loaded tenant_id: 1749478057507
+2025-06-09 19:14:05,887 [INFO] Loaded event field rules
+2025-06-09 19:14:05,887 [INFO] Reading events from events.csv
+2025-06-09 19:14:05,887 [INFO] Sending event: add_to_cart (primary_id: 354651)
+2025-06-09 19:14:05,901 [INFO] Response [200]: 
+2025-06-09 19:14:06,001 [INFO] Sending event: search (primary_id: 396192)
+2025-06-09 19:14:06,012 [INFO] Response [200]: 
+2025-06-09 19:14:06,113 [INFO] Sending event: purchase (primary_id: 869890)
+2025-06-09 19:14:06,124 [INFO] Response [200]: 
+2025-06-09 19:14:06,225 [INFO] Sending event: login (primary_id: 806681)
+2025-06-09 19:14:06,235 [INFO] Response [200]: 
+2025-06-09 19:14:06,336 [INFO] Sending event: search (primary_id: 618895)
+2025-06-09 19:14:06,349 [INFO] Response [200]: 
+2025-06-09 19:14:06,450 [INFO] Sending event: page_view (primary_id: 936533)
+2025-06-09 19:14:06,461 [INFO] Response [200]: 
+2025-06-09 19:14:06,562 [INFO] Sending event: add_to_cart (primary_id: 502228)
+2025-06-09 19:14:06,572 [INFO] Response [200]: 
+2025-06-09 19:14:06,673 [INFO] Sending event: add_to_cart (primary_id: 354651)
+2025-06-09 19:14:06,684 [INFO] Response [200]: 
+2025-06-09 19:14:06,785 [INFO] Sending event: page_view (primary_id: 572634)
+2025-06-09 19:14:06,796 [INFO] Response [200]: 
+2025-06-09 19:14:06,897 [INFO] Sending event: purchase (primary_id: 200389)
+2025-06-09 19:14:06,911 [INFO] Response [200]: 
+2025-06-09 19:14:07,011 [INFO] Sending event: login (primary_id: 705603)
+2025-06-09 19:14:07,022 [INFO] Response [200]: 
+2025-06-09 19:14:07,123 [INFO] Sending event: page_view (primary_id: 354651)
+2025-06-09 19:14:07,136 [INFO] Response [200]: 
+2025-06-09 19:14:07,236 [INFO] Sending event: logout (primary_id: 394593)
+2025-06-09 19:14:07,246 [INFO] Response [200]: 
+2025-06-09 19:14:07,347 [INFO] Sending event: page_view (primary_id: 394593)
+2025-06-09 19:14:07,358 [INFO] Response [200]: 
+2025-06-09 19:14:07,459 [INFO] Sending event: page_view (primary_id: 200389)
+2025-06-09 19:14:07,469 [INFO] Response [200]: 
+2025-06-09 19:14:07,570 [INFO] Sending event: login (primary_id: 869890)
+2025-06-09 19:14:07,583 [INFO] Response [200]: 
+2025-06-09 19:14:07,684 [INFO] Sending event: logout (primary_id: 354651)
+2025-06-09 19:14:07,694 [INFO] Response [200]: 
+2025-06-09 19:14:07,796 [INFO] Sending event: purchase (primary_id: 278943)
+2025-06-09 19:14:07,806 [INFO] Response [200]: 
+2025-06-09 19:14:07,907 [INFO] Sending event: login (primary_id: 827156)
+2025-06-09 19:14:07,917 [INFO] Response [200]: 
+2025-06-09 19:14:08,018 [INFO] Sending event: logout (primary_id: 165058)
+2025-06-09 19:14:08,030 [INFO] Response [200]: 
+2025-06-09 19:14:08,130 [INFO] Sending event: search (primary_id: 916201)
+2025-06-09 19:14:08,141 [INFO] Response [200]: 
+2025-06-09 19:14:08,243 [INFO] Sending event: page_view (primary_id: 705603)
+2025-06-09 19:14:08,253 [INFO] Response [200]: 
+2025-06-09 19:14:08,354 [INFO] Sending event: purchase (primary_id: 869890)
+2025-06-09 19:14:08,365 [INFO] Response [200]: 
+2025-06-09 19:14:08,466 [INFO] Sending event: add_to_cart (primary_id: 200389)
+2025-06-09 19:14:08,477 [INFO] Response [200]: 
+2025-06-09 19:14:08,578 [INFO] Sending event: search (primary_id: 200389)
+2025-06-09 19:14:08,590 [INFO] Response [200]: 
+2025-06-09 19:14:08,691 [INFO] Sending event: search (primary_id: 278943)
+2025-06-09 19:14:08,702 [INFO] Response [200]: 
+2025-06-09 19:14:08,803 [INFO] Sending event: purchase (primary_id: 572634)
+2025-06-09 19:14:08,813 [INFO] Response [200]: 
+2025-06-09 19:14:08,915 [INFO] Sending event: add_to_cart (primary_id: 572634)
+2025-06-09 19:14:08,925 [INFO] Response [200]: 
+2025-06-09 19:14:09,026 [INFO] Sending event: page_view (primary_id: 200389)
+2025-06-09 19:14:09,038 [INFO] Response [200]: 
+2025-06-09 19:14:09,138 [INFO] Sending event: logout (primary_id: 614017)
+2025-06-09 19:14:09,148 [INFO] Response [200]: 
+2025-06-09 19:14:09,249 [INFO] Sending event: purchase (primary_id: 502228)
+2025-06-09 19:14:09,260 [INFO] Response [200]: 
+2025-06-09 19:14:09,361 [INFO] Sending event: logout (primary_id: 200389)
+2025-06-09 19:14:09,371 [INFO] Response [200]: 
+2025-06-09 19:14:09,473 [INFO] Sending event: logout (primary_id: 165058)
+2025-06-09 19:14:09,484 [INFO] Response [200]: 
+2025-06-09 19:14:09,585 [INFO] Sending event: page_view (primary_id: 394593)
+2025-06-09 19:14:09,596 [INFO] Response [200]: 
+2025-06-09 19:14:09,697 [INFO] Sending event: page_view (primary_id: 354651)
+2025-06-09 19:14:09,709 [INFO] Response [200]: 
+2025-06-09 19:14:09,809 [INFO] Sending event: login (primary_id: 761354)
+2025-06-09 19:14:09,820 [INFO] Response [200]: 
+2025-06-09 19:14:09,921 [INFO] Sending event: page_view (primary_id: 806681)
+2025-06-09 19:14:09,933 [INFO] Response [200]: 
+2025-06-09 19:14:10,034 [INFO] Sending event: add_to_cart (primary_id: 618895)
+2025-06-09 19:14:10,044 [INFO] Response [200]: 
+2025-06-09 19:14:10,145 [INFO] Sending event: search (primary_id: 165058)
+2025-06-09 19:14:10,155 [INFO] Response [200]: 
+2025-06-09 19:14:10,256 [INFO] Sending event: search (primary_id: 705603)
+2025-06-09 19:14:10,270 [INFO] Response [200]: 
+2025-06-09 19:14:10,371 [INFO] Completed sending events

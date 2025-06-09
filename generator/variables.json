@@ -8,9 +8,11 @@
     "primary_id": "BIGINT"
   },
   "event_fields": {
-    "login": {
+    "add_to_cart": {
       "event_type": "VARCHAR_1000",
       "primary_id": "BIGINT",
+      "product_id": "VARCHAR_1000",
+      "quantity": "BIGINT",
       "user_id": "BIGINT",
       "session_id": "VARCHAR_1000"
     },
@@ -23,22 +25,14 @@
     "purchase": {
       "event_type": "VARCHAR_1000",
       "primary_id": "BIGINT",
+      "product_id": "VARCHAR_1000",
       "amount": "DOUBLE",
       "quantity": "BIGINT",
       "user_id": "BIGINT",
       "session_id": "VARCHAR_1000",
-      "product_id": "VARCHAR_1000",
       "items": "VARCHAR_1000"
     },
-    "add_to_cart": {
-      "event_type": "VARCHAR_1000",
-      "primary_id": "BIGINT",
-      "quantity": "BIGINT",
-      "user_id": "BIGINT",
-      "product_id": "VARCHAR_1000",
-      "session_id": "VARCHAR_1000"
-    },
-    "logout": {
+    "login": {
       "event_type": "VARCHAR_1000",
       "primary_id": "BIGINT",
       "user_id": "BIGINT",
@@ -47,61 +41,67 @@
     "page_view": {
       "event_type": "VARCHAR_1000",
       "primary_id": "BIGINT",
+      "page_url": "VARCHAR_1000",
       "user_id": "BIGINT",
-      "session_id": "VARCHAR_1000",
-      "page_url": "VARCHAR_1000"
+      "session_id": "VARCHAR_1000"
+    },
+    "logout": {
+      "event_type": "VARCHAR_1000",
+      "primary_id": "BIGINT",
+      "user_id": "BIGINT",
+      "session_id": "VARCHAR_1000"
     }
   },
   "event_field_rules": {
     "add_to_cart": [
-      "session_id",
-      "device_type",
-      "quantity",
-      "platform",
       "primary_id",
+      "session_id",
+      "quantity",
+      "device_type",
       "product_id",
+      "platform",
       "user_id"
     ],
     "purchase": [
-      "platform",
       "primary_id",
-      "product_id",
-      "user_id",
+      "quantity",
       "currency",
       "payment_method",
+      "user_id",
+      "session_id",
+      "amount",
       "device_type",
       "items",
-      "quantity",
-      "amount",
-      "session_id"
+      "product_id",
+      "platform"
     ],
     "login": [
-      "device_type",
-      "platform",
       "primary_id",
       "session_id",
+      "device_type",
+      "platform",
       "user_id"
     ],
     "logout": [
-      "device_type",
-      "platform",
       "primary_id",
       "session_id",
+      "device_type",
+      "platform",
       "user_id"
     ],
     "page_view": [
+      "primary_id",
+      "session_id",
       "device_type",
       "page_url",
       "platform",
-      "primary_id",
-      "session_id",
       "user_id"
     ],
     "search": [
-      "device_type",
-      "platform",
       "primary_id",
       "session_id",
+      "device_type",
+      "platform",
       "user_id"
     ]
   }

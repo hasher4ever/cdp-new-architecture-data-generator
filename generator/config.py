@@ -1,36 +1,39 @@
-import os
+import logging
 import json
+import os
 
+# Placeholder for existing config (e.g., BASE_URL_1, BASE_URL_2, AUTH_TOKEN, DELAY_BETWEEN_REQUESTS)
 BASE_URL_1 = os.getenv("CDP_BASE_URL", "http://10.0.10.140:30100")
 BASE_URL_2 = os.getenv("CDP_BASE_URL", "http://10.0.10.140:30101")
-DELAY_BETWEEN_REQUESTS = 0.1#0.5
-DEBUG1 = False
-DEBUG2 = True
 AUTH_TOKEN = None  # or os.getenv("CDP_AUTH_TOKEN")
-CURL_LOG_FILE = "_3_curl_requests.log"
-CUSTOMERS_CSV = "customers.csv"
-EVENTS_CSV = "events.csv"
+DELAY_BETWEEN_REQUESTS = 0.1  # Update with actual value
 
-#SKIP_FIELDS = {
-#    "primary_id",
-#   "created_at",
-#     "first_name",
-#     "last_name",
-#     "birth_date"
-#     "email",
-#     "phone",
-#     "gender"
-#     "offset",
-#     "event_type",
-#     "partition_id",
-#     "product_id",
-#     "amount",
-#     "quantity",
-#     "user_id",
-#     "session_id",
-#     "page_url",
-# }
+# Logging configuration
+LOG_DIR = "logs"
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
+APP_LOG_FILE = os.path.join(LOG_DIR, "app.log")
+CURL_LOG_FILE = os.path.join(LOG_DIR, "curl.log")
+
+# Configure logger
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(APP_LOG_FILE),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Configure cURL logger
+curl_handler = logging.FileHandler(CURL_LOG_FILE)
+curl_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+curl_logger = logging.getLogger("curl")
+curl_logger.setLevel(logging.DEBUG)
+curl_logger.addHandler(curl_handler)
+curl_logger.propagate = False
 
 def curl_from_request(method: str, url: str, headers: dict = None, data=None):
     parts = [f"curl -X {method.upper()} '{url}'"]
@@ -42,20 +45,8 @@ def curl_from_request(method: str, url: str, headers: dict = None, data=None):
         parts.append(f"--data '{body}'")
     return " ".join(parts)
 
-def handle_curl_debug(method, url, headers, data, response):
+def handle_curl_debug(method, url, headers, data, response=None):
     curl = curl_from_request(method, url, headers, data)
-    if DEBUG1 and not response.ok:
-        print(f"[DEBUG1] Failed request:\n{curl}")
-    if DEBUG2:
-        with open(CURL_LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(curl + "\n")
-
-
-# TENANT_FILE = "variables.json"
-
-# def load_tenant_id():
-#     if os.path.exists(TENANT_FILE):
-#         with open(TENANT_FILE, "r", encoding="utf-8") as f:
-#             data = json.load(f)
-#             return data.get("tenant_id")
-#     return None
+    curl_logger.debug(curl)
+    if response and not response.ok:
+        logger.error(f"Failed request [{response.status_code}]: {response.text}\n{curl}")
