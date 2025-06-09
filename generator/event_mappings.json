@@ -5,6 +5,10 @@
       "dtype": "VARCHAR_1000"
     },
     {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
       "name": "user_id",
       "dtype": "BIGINT"
     },
@@ -19,119 +23,145 @@
     {
       "name": "quantity",
       "dtype": "BIGINT"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "page_url",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "product_id",
-      "dtype": "VARCHAR_1000"
     },
     {
       "name": "amount",
       "dtype": "DOUBLE"
     },
     {
+      "name": "items",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "product_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
       "name": "quantity",
       "dtype": "BIGINT"
     },
     {
-      "name": "items",
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "page_url",
       "dtype": "VARCHAR_1000"
     }
   ],
   "mappings": {
-    "add_to_cart": [
+    "purchase": [
+      "session_id",
       "quantity",
       "product_id",
       "user_id",
-      "session_id"
+      "items",
+      "primary_id",
+      "amount"
+    ],
+    "search": [
+      "user_id",
+      "session_id",
+      "primary_id"
+    ],
+    "add_to_cart": [
+      "session_id",
+      "quantity",
+      "product_id",
+      "user_id",
+      "primary_id"
     ],
     "logout": [
       "user_id",
-      "session_id"
+      "session_id",
+      "primary_id"
+    ],
+    "login": [
+      "user_id",
+      "session_id",
+      "primary_id"
     ],
     "page_view": [
       "user_id",
       "page_url",
-      "session_id"
-    ],
-    "search": [
-      "user_id",
-      "session_id"
-    ],
-    "login": [
-      "user_id",
-      "session_id"
-    ],
-    "purchase": [
-      "user_id",
-      "amount",
-      "items",
-      "quantity",
       "session_id",
-      "product_id"
+      "primary_id"
     ]
   }
 }

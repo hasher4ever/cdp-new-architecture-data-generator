@@ -5,7 +5,7 @@ import config
 from datetime import datetime, timezone
 from collections import defaultdict
 
-LOG_FILE = "_2_register_schema.log"
+LOG_FILE = "_3_register_schema.log"
 VARIABLES_FILE = "variables.json"
 MAPPINGS_FILE = "event_mappings.json"
 TENANT_FILE = "tenant.json"
@@ -97,7 +97,7 @@ def post_new_event_mappings(mappings, base_url, tenant_id, new_fields):
     for event_name, fields in mappings.items():
         if event_name not in event_field_rules:
             continue
-        allowed_fields = event_field_rules[event_name]
+        allowed_fields = set(event_field_rules[event_name]) | {"primary_id"}  # Ensure primary_id is included
         existing_fields = set(existing_mappings.get(event_name, []))
         valid_fields = [f for f in fields if f in allowed_fields and f in all_event_fields and f not in existing_fields]
         if valid_fields:

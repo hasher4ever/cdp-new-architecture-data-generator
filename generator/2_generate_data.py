@@ -22,12 +22,12 @@ PAYMENT_METHODS = ['credit_card', 'debit_card', 'paypal', 'bank_transfer']
 
 # Define event-specific fields
 EVENT_FIELD_RULES = {
-    "add_to_cart": {"quantity", "product_id", "user_id", "session_id", "device_type", "platform"},
-    "purchase": {"amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method"},
-    "login": {"user_id", "session_id", "device_type", "platform"},
-    "logout": {"user_id", "session_id", "device_type", "platform"},
-    "page_view": {"page_url", "user_id", "session_id", "device_type", "platform"},
-    "search": {"user_id", "session_id", "device_type", "platform"}
+    "add_to_cart": {"primary_id", "quantity", "product_id", "user_id", "session_id", "device_type", "platform"},
+    "purchase": {"primary_id", "amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method"},
+    "login": {"primary_id", "user_id", "session_id", "device_type", "platform"},
+    "logout": {"primary_id", "user_id", "session_id", "device_type", "platform"},
+    "page_view": {"primary_id", "page_url", "user_id", "session_id", "device_type", "platform"},
+    "search": {"primary_id", "user_id", "session_id", "device_type", "platform"}
 }
 
 def infer_dtype(value):
@@ -137,12 +137,12 @@ events = []
 event_field_types = {}
 
 def generate_event_data(event_name, user_id):
-    event = {"event_type": event_name}
+    event = {"event_type": event_name, "primary_id": random.randint(100000, 999999)}
     allowed_fields = EVENT_FIELD_RULES.get(event_name, set())
     for field in event_fields:
         if field["name"] in ["created_at", "offset", "partition_id"] and field["flags"]["tableBuildIn"]:
             continue
-        if field["name"] == "event_type":
+        if field["name"] in ["event_type", "primary_id"]:
             continue
         if field["name"] not in allowed_fields:
             continue
@@ -193,6 +193,9 @@ for event in events:
             event_mappings[event_name].add(key)
 
 event_field_types["purchase"]["items"] = "VARCHAR_1000"
+if "primary_id" not in event_field_types.get("purchase", {}):
+    for event_type in EVENT_TYPES:
+        event_field_types[event_type]["primary_id"] = "BIGINT"
 
 field_definitions = []
 for event_type, fields in event_field_types.items():
