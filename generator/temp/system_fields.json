@@ -1,4 +1,0 @@
-{
-  "system_customer_fields": ["customer_id", "email", "created_at"],
-  "system_event_fields": ["primary_id", "offset", "amount", "quantity", "created_at", "event_type", "partition_id", "page_url", "product_id", "user_id", "session_id"]
-}

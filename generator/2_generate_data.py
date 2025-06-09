@@ -11,9 +11,9 @@ import config
 logger = config.logger
 fake = Faker()
 
-NUM_CUSTOMERS = 20
-NUM_EVENTS = 40
-NUM_PRODUCTS = 10
+NUM_CUSTOMERS = 1000
+NUM_EVENTS = 5000
+NUM_PRODUCTS = 200
 
 EVENT_TYPES = ['add_to_cart', 'purchase', 'login', 'logout', 'page_view', 'search']
 DEVICE_TYPES = ['mobile', 'desktop', 'tablet']

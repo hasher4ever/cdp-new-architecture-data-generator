@@ -2,11 +2,11 @@ import requests
 import uuid
 import json
 import os
-from datetime import datetime, timezone
 import config
 
 logger = config.logger
 TENANT_FILE = "tenant.json"
+
 
 def save_variable(key, value):
     data = {}
@@ -17,6 +17,7 @@ def save_variable(key, value):
     with open(TENANT_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
     logger.info(f"Saved {key} to {TENANT_FILE}")
+
 
 def create_tenant():
     tenant_name = f"tenant-{uuid.uuid4().hex[:8]}"
@@ -34,6 +35,7 @@ def create_tenant():
     else:
         logger.error(f"Failed to create tenant: {response.status_code} {response.text}")
         raise Exception(f"Failed to create tenant: {response.status_code} {response.text}")
+
 
 if __name__ == "__main__":
     create_tenant()
