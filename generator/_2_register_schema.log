@@ -26,7 +26,8 @@ Payload: {
       "product_id",
       "quantity",
       "amount",
-      "primary_id"
+      "
+      primary_id"
     ],
     "add_to_cart": [
       "page_url",
@@ -61,6 +62,250 @@ Payload: {
       "quantity",
       "amount",
       "primary_id"
+    ]
+  }
+}
+Response Code: 204
+Response Body: 
+
+[2025-06-09T09:46:38.284617+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749462239269/schema/events/fields/draft
+Payload: {
+  "name": "items",
+  "dtype": "VARCHAR_1000"
+}
+Response Code: 200
+Response Body: {"ID":"1d7b733f-1428-47a8-8e9c-835681915f75"}
+
+
+[2025-06-09T09:46:38.334614+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749462239269/schema/events/field-mappings
+Payload: {
+  "mappings": {
+    "page_view": [
+      "quantity",
+      "amount",
+      "product_id",
+      "primary_id"
+    ],
+    "search": [
+      "quantity",
+      "user_id",
+      "session_id",
+      "amount",
+      "product_id",
+      "primary_id",
+      "page_url"
+    ],
+    "purchase": [
+      "items",
+      "primary_id",
+      "page_url"
+    ],
+    "logout": [
+      "quantity",
+      "user_id",
+      "session_id",
+      "amount",
+      "product_id",
+      "primary_id",
+      "page_url"
+    ],
+    "add_to_cart": [
+      "amount",
+      "primary_id",
+      "page_url"
+    ],
+    "login": [
+      "quantity",
+      "user_id",
+      "session_id",
+      "amount",
+      "product_id",
+      "primary_id",
+      "page_url"
+    ]
+  }
+}
+Response Code: 204
+Response Body: 
+
+[2025-06-09T10:08:54.144873+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749463375467/schema/events/fields/draft
+Payload: {
+  "name": "items",
+  "dtype": "VARCHAR_1000"
+}
+Response Code: 200
+Response Body: {"ID":"f72d5979-346d-4238-a73e-9ed4bc45ab45"}
+
+
+[2025-06-09T10:08:54.198711+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749463375467/schema/events/field-mappings
+Payload: {
+  "mappings": {
+    "login": [
+      "product_id",
+      "page_url",
+      "session_id",
+      "quantity",
+      "primary_id",
+      "amount",
+      "user_id"
+    ],
+    "logout": [
+      "product_id",
+      "page_url",
+      "session_id",
+      "quantity",
+      "primary_id",
+      "amount",
+      "user_id"
+    ],
+    "page_view": [
+      "product_id",
+      "quantity",
+      "primary_id",
+      "amount"
+    ],
+    "purchase": [
+      "page_url",
+      "items",
+      "primary_id"
+    ],
+    "add_to_cart": [
+      "page_url",
+      "primary_id",
+      "amount"
+    ],
+    "search": [
+      "product_id",
+      "page_url",
+      "session_id",
+      "primary_id",
+      "amount",
+      "quantity",
+      "user_id"
+    ]
+  }
+}
+Response Code: 204
+Response Body: 
+
+[2025-06-09T10:53:27.960111+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749466372326/schema/events/fields/draft
+Payload: {
+  "name": "items",
+  "dtype": "VARCHAR_1000"
+}
+Response Code: 200
+Response Body: {"ID":"4add3811-38f9-42b6-97a8-7dadc901d6f5"}
+
+
+[2025-06-09T10:53:28.012267+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749466372326/schema/events/field-mappings
+Payload: {
+  "mappings": {
+    "add_to_cart": [
+      "primary_id",
+      "amount",
+      "page_url"
+    ],
+    "page_view": [
+      "quantity",
+      "primary_id",
+      "product_id",
+      "amount"
+    ],
+    "purchase": [
+      "primary_id",
+      "items",
+      "page_url"
+    ],
+    "login": [
+      "quantity",
+      "primary_id",
+      "product_id",
+      "amount",
+      "user_id",
+      "page_url",
+      "session_id"
+    ],
+    "search": [
+      "quantity",
+      "primary_id",
+      "product_id",
+      "amount",
+      "user_id",
+      "page_url",
+      "session_id"
+    ],
+    "logout": [
+      "quantity",
+      "primary_id",
+      "product_id",
+      "amount",
+      "user_id",
+      "page_url",
+      "session_id"
+    ]
+  }
+}
+Response Code: 204
+Response Body: 
+
+[2025-06-09T11:04:08.091393+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749467021477/schema/events/fields/draft
+Payload: {
+  "name": "items",
+  "dtype": "VARCHAR_1000"
+}
+Response Code: 200
+Response Body: {"ID":"279e4b60-3d56-464f-af30-58b61f13efbb"}
+
+
+[2025-06-09T11:04:08.135252+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749467021477/schema/events/field-mappings
+Payload: {
+  "mappings": {
+    "logout": [
+      "session_id",
+      "user_id"
+    ],
+    "purchase": [
+      "items"
+    ],
+    "search": [
+      "session_id",
+      "user_id"
+    ],
+    "login": [
+      "session_id",
+      "user_id"
+    ]
+  }
+}
+Response Code: 204
+Response Body: 
+
+[2025-06-09T11:40:03.936690+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749467538300/schema/events/fields/draft
+Payload: {
+  "name": "items",
+  "dtype": "VARCHAR_1000"
+}
+Response Code: 200
+Response Body: {"ID":"fa8d8df5-9fdf-4332-b4a2-c39dd54bee65"}
+
+
+[2025-06-09T11:40:03.984690+00:00] REQUEST to http://10.0.10.140:30100/api/tenants/1749467538300/schema/events/field-mappings
+Payload: {
+  "mappings": {
+    "logout": [
+      "user_id",
+      "session_id"
+    ],
+    "search": [
+      "user_id",
+      "session_id"
+    ],
+    "login": [
+      "user_id",
+      "session_id"
+    ],
+    "purchase": [
+      "items"
     ]
   }
 }

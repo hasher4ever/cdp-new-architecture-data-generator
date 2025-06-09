@@ -3,11 +3,11 @@ import json
 
 BASE_URL_1 = os.getenv("CDP_BASE_URL", "http://10.0.10.140:30100")
 BASE_URL_2 = os.getenv("CDP_BASE_URL", "http://10.0.10.140:30101")
-DELAY_BETWEEN_REQUESTS = 1#0.5
+DELAY_BETWEEN_REQUESTS = 0.1#0.5
 DEBUG1 = False
 DEBUG2 = True
 AUTH_TOKEN = None  # or os.getenv("CDP_AUTH_TOKEN")
-CURL_LOG_FILE = "curl_requests.txt"
+CURL_LOG_FILE = "_3_curl_requests.txt"
 CUSTOMERS_CSV = "customers.csv"
 EVENTS_CSV = "events.csv"
 

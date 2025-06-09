@@ -4,7 +4,7 @@ import random
 import json
 import requests
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import defaultdict
 import config
 
@@ -20,6 +20,15 @@ PLATFORMS = ['web', 'iOS', 'Android']
 CURRENCIES = ['USD', 'EUR', 'RUB']
 PAYMENT_METHODS = ['credit_card', 'debit_card', 'paypal', 'bank_transfer']
 
+# Define event-specific fields
+EVENT_FIELD_RULES = {
+    "add_to_cart": {"quantity", "product_id", "user_id", "session_id", "device_type", "platform"},
+    "purchase": {"amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method"},
+    "login": {"user_id", "session_id", "device_type", "platform"},
+    "logout": {"user_id", "session_id", "device_type", "platform"},
+    "page_view": {"page_url", "user_id", "session_id", "device_type", "platform"},
+    "search": {"user_id", "session_id", "device_type", "platform"}
+}
 
 def infer_dtype(value):
     if isinstance(value, bool):
@@ -31,21 +40,11 @@ def infer_dtype(value):
     if isinstance(value, str):
         if "T" in value and "Z" in value:
             return "DATETIME"
-        if "-" in value:
-            try:
-                datetime.fromisoformat(value)
-                return "DATE"
-            except:
-                pass
     return "VARCHAR_1000"
 
-
-# Load tenant_id from tenant.json
 with open("tenant.json", "r", encoding="utf-8") as f:
     tenant_id = json.load(f)["tenant_id"]
 
-
-# Fetch tenant schema
 def get_tenant_schema(base_url, tenant_id):
     url = f"{base_url}/api/tenants/{tenant_id}/info"
     response = requests.get(url)
@@ -54,23 +53,19 @@ def get_tenant_schema(base_url, tenant_id):
     data = response.json()
     return data.get("customerFields", []), data.get("eventFields", [])
 
-
-# Get schema fields
 customer_fields, event_fields = get_tenant_schema(config.BASE_URL_1, tenant_id)
 
-
-# Map field types to generators
-def generate_field_value(field):
+def generate_field_value(field, event_type=None):
     field_type = field["type"]
     nullable = field["nullable"]
     size = field["size"]
 
-    if nullable and random.random() < 0.2:  # 20% chance of null for nullable fields
+    if nullable and random.random() < 0.2:
         return None
 
     if field_type == "bigint":
         if field["name"] == "primary_id":
-            return random.randint(100000, 999999)  # Unique ID
+            return random.randint(100000, 999999)
         elif field["name"] == "offset" or field["name"] == "partition_id":
             return random.randint(0, 1000)
         elif field["name"] == "quantity":
@@ -85,8 +80,8 @@ def generate_field_value(field):
         elif field["name"] == "gender":
             return random.choice(["Male", "Female", "Other"])
         elif field["name"] == "event_type":
-            return random.choice(EVENT_TYPES)
-        elif field["name"] == "user_id" or field["name"] == "session_id" or field["name"] == "product_id":
+            return event_type
+        elif field["name"] in ["user_id", "session_id", "product_id", "items"]:
             return str(uuid.uuid4())
         elif field["name"] == "page_url":
             return fake.url()
@@ -97,11 +92,8 @@ def generate_field_value(field):
                                  PAYMENT_METHODS)
         return fake.word()[:size] if size else fake.word()
 
-    elif field_type == "date":
-        return fake.date_of_birth(minimum_age=18, maximum_age=80).isoformat()
-
-    elif field_type == "datetime":
-        return fake.date_time_this_year().isoformat() + "Z"
+    elif field_type in ["date", "datetime"]:
+        return fake.date_time_this_year(tzinfo=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
     elif field_type == "double":
         return round(random.uniform(10, 500), 2)
@@ -111,8 +103,6 @@ def generate_field_value(field):
 
     raise ValueError(f"Unknown field type: {field_type}")
 
-
-# Generate customers
 customers = []
 customer_ids = []
 customer_field_types = {}
@@ -121,91 +111,78 @@ for _ in range(NUM_CUSTOMERS):
     customer = {}
     for field in customer_fields:
         if field["name"] == "created_at" and field["flags"]["tableBuildIn"]:
-            continue  # Skip system-managed created_at
+            continue
         customer[field["name"]] = generate_field_value(field)
-
     customers.append(customer)
     if "primary_id" in customer:
         customer_ids.append(customer["primary_id"])
-
     if not customer_field_types:
         for field in customer_fields:
-            customer_field_types[field["name"]] = field["type"].replace("boolean", "BOOL").replace("bigint",
-                                                                                                   "BIGINT").replace(
-                "double", "DOUBLE").replace("varchar", "VARCHAR_1000").replace("date", "DATE").replace("datetime",
-                                                                                                       "DATETIME")
+            customer_field_types[field["name"]] = field["type"].replace("boolean", "BOOL").replace("bigint", "BIGINT").replace(
+                "double", "DOUBLE").replace("varchar", "VARCHAR_1000").replace("date", "DATETIME").replace("datetime", "DATETIME")
+
+def write_csv_with_types(data, filename, fieldnames):
+    with open(filename, "w", newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in data:
+            string_row = {k: "" if v is None else str(v).lower() if isinstance(v, bool) else str(v) for k, v in row.items()}
+            writer.writerow(string_row)
 
 with open("customers.csv", "w", newline='') as f:
-    writer = csv.DictWriter(f, fieldnames=[f["name"] for f in customer_fields if f["name"] != "created_at"])
-    writer.writeheader()
-    writer.writerows(customers)
+    fieldnames = [f["name"] for f in customer_fields if f["name"] != "created_at"]
+    write_csv_with_types(customers, "customers.csv", fieldnames)
 
-# Generate events
 events = []
-event_field_types = {}  # key: event_type -> value: {field: type}
-
+event_field_types = {}
 
 def generate_event_data(event_name, user_id):
     event = {"event_type": event_name}
+    allowed_fields = EVENT_FIELD_RULES.get(event_name, set())
     for field in event_fields:
         if field["name"] in ["created_at", "offset", "partition_id"] and field["flags"]["tableBuildIn"]:
-            continue  # Skip system-managed fields
+            continue
+        if field["name"] == "event_type":
+            continue
+        if field["name"] not in allowed_fields:
+            continue
         if field["name"] == "user_id" and user_id:
             event["user_id"] = user_id
-        elif field["name"] == "event_type":
-            continue  # Already set
         else:
-            value = generate_field_value(field)
+            value = generate_field_value(field, event_name)
             if value is not None or not field["nullable"]:
                 event[field["name"]] = value
 
-    # Add event-specific fields
     if event_name == "add_to_cart":
-        event.update({
-            "quantity": random.randint(1, 5),
-            "product_id": str(uuid.uuid4())
-        })
+        event.update({"quantity": random.randint(1, 5), "product_id": str(uuid.uuid4())})
     elif event_name == "purchase":
         items = [str(uuid.uuid4()) for _ in range(random.randint(1, 3))]
-        event.update({
-            "amount": round(random.uniform(50, 1000), 2),
-            "quantity": len(items),
-            "product_id": items[0],
-            "items": ";".join(items)
-        })
+        event.update({"amount": round(random.uniform(50, 1000), 2), "quantity": len(items), "product_id": items[0], "items": ";".join(items)})
     elif event_name == "page_view":
-        event.update({
-            "page_url": fake.url()
-        })
+        event.update({"page_url": fake.url()})
 
     return event
-
 
 for _ in range(NUM_EVENTS):
     user_id = random.choice(customer_ids) if customer_ids else str(uuid.uuid4())
     event_type = random.choice(EVENT_TYPES)
     event = generate_event_data(event_type, user_id)
     events.append(event)
-
     if event_type not in event_field_types:
         event_field_types[event_type] = {}
     for k, v in event.items():
         if k not in event_field_types[event_type]:
             event_field_types[event_type][k] = infer_dtype(v)
 
-# Write events to CSV
 fieldnames = set()
 for event in events:
     fieldnames.update(event.keys())
-fieldnames = [f["name"] for f in event_fields if f["name"] not in ["created_at", "offset", "partition_id"]] + list(
-    set(fieldnames) - set(f["name"] for f in event_fields))
+fieldnames = sorted(
+    [f["name"] for f in event_fields if f["name"] not in ["created_at", "offset", "partition_id"]] + list(
+        fieldnames - set(f["name"] for f in event_fields)))
 
-with open("events.csv", "w", newline='') as f:
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(events)
+write_csv_with_types(events, "events.csv", fieldnames)
 
-# Prepare event mappings
 event_mappings = defaultdict(set)
 for event in events:
     event_name = event.get("event_type")
@@ -215,16 +192,13 @@ for event in events:
         if key != "event_type":
             event_mappings[event_name].add(key)
 
-# Create field definitions
+event_field_types["purchase"]["items"] = "VARCHAR_1000"
+
 field_definitions = []
 for event_type, fields in event_field_types.items():
     for field, dtype in fields.items():
-        field_definitions.append({
-            "name": field,
-            "dtype": dtype
-        })
+        field_definitions.append({"name": field, "dtype": dtype})
 
-# Create event-to-field mappings
 mappings_to_save = {
     "fields": field_definitions,
     "mappings": {event: list(fields) for event, fields in event_mappings.items()}
@@ -233,10 +207,10 @@ mappings_to_save = {
 with open("event_mappings.json", "w", encoding="utf-8") as f:
     json.dump(mappings_to_save, f, indent=2)
 
-# Save variables
 variables = {
     "customer_fields": customer_field_types,
-    "event_fields": event_field_types
+    "event_fields": event_field_types,
+    "event_field_rules": {event: list(fields) for event, fields in EVENT_FIELD_RULES.items()}
 }
 with open("variables.json", "w", encoding="utf-8") as f:
     json.dump(variables, f, indent=2)
