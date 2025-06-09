@@ -9,51 +9,7 @@
       "dtype": "BIGINT"
     },
     {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "product_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
       "name": "quantity",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "amount",
-      "dtype": "DOUBLE"
-    },
-    {
-      "name": "items",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
       "dtype": "BIGINT"
     },
     {
@@ -66,42 +22,6 @@
     },
     {
       "name": "product_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "quantity",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "event_type",
-      "dtype": "VARCHAR_1000"
-    },
-    {
-      "name": "primary_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "user_id",
-      "dtype": "BIGINT"
-    },
-    {
-      "name": "session_id",
       "dtype": "VARCHAR_1000"
     },
     {
@@ -123,44 +43,124 @@
     {
       "name": "page_url",
       "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "amount",
+      "dtype": "DOUBLE"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "product_id",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "quantity",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "items",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "event_type",
+      "dtype": "VARCHAR_1000"
+    },
+    {
+      "name": "primary_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "user_id",
+      "dtype": "BIGINT"
+    },
+    {
+      "name": "session_id",
+      "dtype": "VARCHAR_1000"
     }
   ],
   "mappings": {
-    "purchase": [
-      "session_id",
-      "quantity",
+    "add_to_cart": [
       "product_id",
-      "user_id",
-      "items",
-      "primary_id",
-      "amount"
-    ],
-    "search": [
-      "user_id",
       "session_id",
+      "primary_id",
+      "user_id",
+      "quantity"
+    ],
+    "page_view": [
+      "page_url",
+      "session_id",
+      "user_id",
       "primary_id"
     ],
-    "add_to_cart": [
+    "search": [
       "session_id",
-      "quantity",
-      "product_id",
       "user_id",
       "primary_id"
     ],
     "logout": [
-      "user_id",
       "session_id",
+      "user_id",
       "primary_id"
+    ],
+    "purchase": [
+      "product_id",
+      "items",
+      "session_id",
+      "primary_id",
+      "amount",
+      "user_id",
+      "quantity"
     ],
     "login": [
-      "user_id",
       "session_id",
-      "primary_id"
-    ],
-    "page_view": [
       "user_id",
-      "page_url",
-      "session_id",
       "primary_id"
     ]
   }

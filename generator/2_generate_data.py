@@ -137,7 +137,7 @@ events = []
 event_field_types = {}
 
 def generate_event_data(event_name, user_id):
-    event = {"event_type": event_name, "primary_id": random.randint(100000, 999999)}
+    event = {"event_type": event_name, "primary_id": user_id}
     allowed_fields = EVENT_FIELD_RULES.get(event_name, set())
     for field in event_fields:
         if field["name"] in ["created_at", "offset", "partition_id"] and field["flags"]["tableBuildIn"]:
@@ -164,7 +164,7 @@ def generate_event_data(event_name, user_id):
     return event
 
 for _ in range(NUM_EVENTS):
-    user_id = random.choice(customer_ids) if customer_ids else str(uuid.uuid4())
+    user_id = random.choice(customer_ids) if customer_ids else random.randint(100000, 999999)
     event_type = random.choice(EVENT_TYPES)
     event = generate_event_data(event_type, user_id)
     events.append(event)
