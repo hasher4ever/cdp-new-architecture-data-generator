@@ -1,6 +1,7 @@
 import uuid
 import random
 import json
+import csv
 from datetime import datetime, timezone
 from collections import defaultdict
 from utils import (logger, fake, config, get_tenant_schema, write_csv_with_types, infer_dtype,
@@ -8,7 +9,7 @@ from utils import (logger, fake, config, get_tenant_schema, write_csv_with_types
                   PRODUCT_BRANDS, PRODUCT_CATEGORIES, PRODUCT_COLORS, PRODUCT_SIZES, PRODUCT_TYPES,
                   EVENT_FIELD_RULES)
 
-NUM_EVENTS = 5000
+NUM_EVENTS = 500
 
 with open("tenant.json", "r", encoding="utf-8") as f:
     tenant_id = json.load(f)["tenant_id"]
@@ -16,9 +17,11 @@ logger.info(f"Loaded tenant_id: {tenant_id}")
 
 with open("product_data.json", "r", encoding="utf-8") as f:
     product_data = json.load(f)
-    products = [{"product_id": pid, **{k: v for k, v in p.items() if k != "product_id"}}
-               for p in [json.load(open("products.csv", "r", encoding="utf-8")).__next__()]
-               for pid in product_data["product_ids"]]
+    with open("products.csv", "r", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        first_row = next(reader)  # Get the first row
+        products = [{"product_id": pid, **{k: v for k, v in first_row.items() if k != "product_id"}}
+                   for pid in product_data["product_ids"]]
 product_ids = product_data["product_ids"]
 
 with open("customer_data.json", "r", encoding="utf-8") as f:
@@ -48,8 +51,10 @@ def generate_field_value(field, event_type=None):
     elif field_type == "varchar":
         if field["name"] == "event_type":
             return event_type
-        elif field["name"] in ["user_id", "session_id", "product_id", "items"]:
+        elif field["name"] in ["user_id", "session_id", "product_id"]:
             return str(uuid.uuid4())
+        elif field["name"] == "items":
+            return ""  # Will be populated in purchase event with semicolon-separated product IDs
         elif field["name"] == "page_url":
             return fake.url()
         elif field["name"] == "brand":
@@ -64,24 +69,23 @@ def generate_field_value(field, event_type=None):
             return random.choice(PRODUCT_TYPES[random.choice(PRODUCT_CATEGORIES)])
         elif field["name"] in ["device_type", "platform", "currency", "payment_method"]:
             return random.choice(DEVICE_TYPES if field["name"] == "device_type" else
-                                PLATFORMS if field["name"] == "platform" else
-                                CURRENCIES if field["name"] == "currency" else
-                                PAYMENT_METHODS)
+                              PLATFORMS if field["name"] == "platform" else
+                              CURRENCIES if field["name"] == "currency" else
+                              PAYMENT_METHODS)
         return fake.word()[:size] if size else fake.word()
 
     elif field_type in ["date", "datetime"]:
         return fake.date_time_this_year(tzinfo=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
     elif field_type == "double":
+        if field["name"] in ["price", "amount"]:  # Explicitly handle price and amount as double
+            return round(random.uniform(10, 500), 2)
         return round(random.uniform(10, 500), 2)
 
     elif field_type == "boolean":
         return random.choice([True, False])
 
     raise ValueError(f"Unknown field type: {field_type}")
-
-events = []
-event_field_types = {}
 
 def generate_event_data(event_name, user_id):
     event = {"event_type": event_name, "primary_id": user_id}
@@ -102,9 +106,10 @@ def generate_event_data(event_name, user_id):
 
     if event_name in ["add_to_cart", "purchase"]:
         product = random.choice(products)
+        price = round(float(product["price"]), 2)  # Ensure price is float
         event.update({
             "product_id": product["product_id"],
-            "price": product["price"],
+            "price": price,
             "brand": product["brand"],
             "category": product["category"],
             "color": product["color"],
@@ -114,17 +119,22 @@ def generate_event_data(event_name, user_id):
         if event_name == "add_to_cart":
             event["quantity"] = random.randint(1, 5)
         elif event_name == "purchase":
-            items = [random.choice(products)["product_id"] for _ in range(random.randint(1, 3))]
+            quantity = random.randint(1, 5)
+            items = [random.choice(products) for _ in range(quantity)]
             event.update({
-                "quantity": len(items),
-                "amount": round(sum(float(p["price"]) for p in products if p["product_id"] in items), 2),
-                "items": ";".join(items)
+                "quantity": quantity,
+                "amount": round(sum(float(p["price"]) * quantity for p in items) / quantity, 2),  # Average price * quantity
+                "items": ";".join(p["product_id"] for p in items)
             })
 
     elif event_name == "page_view":
         event.update({"page_url": fake.url()})
 
     return event
+
+# Initialize events list and event_field_types dictionary
+events = []
+event_field_types = {}
 
 logger.info(f"Generating {NUM_EVENTS} events")
 for _ in range(NUM_EVENTS):
@@ -157,10 +167,11 @@ for event in events:
         if key != "event_type":
             event_mappings[event_name].add(key)
 
+# Force correct data types for critical fields
+event_field_types["purchase"]["price"] = "DOUBLE"
+event_field_types["purchase"]["amount"] = "DOUBLE"
 event_field_types["purchase"]["items"] = "VARCHAR_1000"
-for event_type in EVENT_TYPES:
-    if "primary_id" not in event_field_types.get(event_type, {}):
-        event_field_types[event_type]["primary_id"] = "BIGINT"
+event_field_types["add_to_cart"]["price"] = "DOUBLE"
 
 field_definitions = []
 for event_type, fields in event_field_types.items():

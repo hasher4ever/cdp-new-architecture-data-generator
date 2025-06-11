@@ -39,8 +39,12 @@ def load_mappings():
         logger.error(f"{MAPPINGS_FILE} not found. Run generator first.")
         raise FileNotFoundError(f"{MAPPINGS_FILE} not found. Run generator first.")
     with open(MAPPINGS_FILE, "r", encoding="utf-8") as f:
-        logger.info(f"Loaded mappings from {MAPPINGS_FILE}")
-        return json.load(f)
+        data = json.load(f)
+        # Deduplicate fields by name
+        seen = set()
+        data["fields"] = [f for f in data["fields"] if not (f["name"] in seen or seen.add(f["name"]))]
+        logger.info(f"Loaded and deduplicated mappings from {MAPPINGS_FILE}")
+        return data
 
 def get_existing_fields(base_url, tenant_id):
     url = f"{base_url}/api/tenants/{tenant_id}/info"
@@ -51,11 +55,11 @@ def get_existing_fields(base_url, tenant_id):
         logger.error(f"Failed to fetch tenant info: {response.status_code} {response.text}")
         raise Exception(f"Failed to fetch tenant info: {response.status_code} {response.text}")
     data = response.json()
-    return (
-        {field["name"] for field in data.get("customerFields", [])},
-        {field["name"] for field in data.get("eventFields", [])},
-        {field["name"] for field in data.get("productFields", [])}
-    )
+    customer_fields = {field["name"] for field in data.get("customerFields", [])}
+    event_fields = {field["name"] for field in data.get("eventFields", [])}
+    product_fields = {field["name"] for field in data.get("productFields", [])}
+    logger.info(f"Existing event fields: {event_fields}")
+    return customer_fields, event_fields, product_fields
 
 def get_existing_event_mappings(base_url, tenant_id):
     url = f"{base_url}/api/tenants/{tenant_id}/schema/events/field-mappings"
@@ -82,37 +86,43 @@ def post_new_customer_fields(fields, base_url, tenant_id):
         logger.info(f"Customer field: {field_name} -> {response.status_code}")
         assert response.ok, f"Failed to register customer field: {response.text}"
 
-def post_new_product_fields(fields, base_url, tenant_id):
-    _, _, existing_product_fields = get_existing_fields(base_url, tenant_id)
-    for field_name, field_type in fields.items():
-        if field_name in existing_product_fields:
-            logger.info(f"Product field {field_name} already exists, skipping")
-            continue
-        payload = {"name": field_name, "dtype": field_type}
-        url = f"{base_url}/api/tenants/{tenant_id}/schema/products/fields/draft"
-        logger.info(f"Registering product field: {field_name}")
-        response = requests.post(url, json=payload)
-        config.handle_curl_debug("POST", url, headers=None, data=payload, response=response)
-        logger.info(f"Product field: {field_name} -> {response.status_code}")
-        assert response.ok, f"Failed to register product field: {response.text}"
+# def post_new_product_fields(fields, base_url, tenant_id):
+#     _, _, existing_product_fields = get_existing_fields(base_url, tenant_id)
+#     for field_name, field_type in fields.items():
+#         if field_name in existing_product_fields:
+#             logger.info(f"Product field {field_name} already exists, skipping")
+#             continue
+#         payload = {"name": field_name, "dtype": field_type}
+#         url = f"{base_url}/api/tenants/{tenant_id}/schema/products/fields/draft"
+#         logger.info(f"Registering product field: {field_name}")
+#         response = requests.post(url, json=payload)
+#         config.handle_curl_debug("POST", url, headers=None, data=payload, response=response)
+#         logger.info(f"Product field: {field_name} -> {response.status_code}")
+#         assert response.ok, f"Failed to register product field: {response.text}"
 
 def post_new_event_fields(fields, base_url, tenant_id):
     _, existing_fields, _ = get_existing_fields(base_url, tenant_id)
     new_fields = []
+    seen_fields = set()  # Track processed field names
     for field in fields:
-        if field["name"] in existing_fields:
-            logger.info(f"Event field {field['name']} already exists, skipping")
+        field_name = field["name"]
+        if field_name in seen_fields:
+            logger.warning(f"Duplicate event field {field_name} found in mappings_data, skipping")
             continue
-        payload = {"name": field["name"], "dtype": field["dtype"]}
+        seen_fields.add(field_name)
+        if field_name in existing_fields:
+            logger.info(f"Event field {field_name} already exists, skipping")
+            continue
+        payload = {"name": field_name, "dtype": field["dtype"]}
         url = f"{base_url}/api/tenants/{tenant_id}/schema/events/fields/draft"
-        logger.info(f"Registering event field: {field['name']}")
+        logger.info(f"Registering event field: {field_name}")
         response = requests.post(url, json=payload)
         config.handle_curl_debug("POST", url, headers=None, data=payload, response=response)
-        logger.info(f"Event field: {field['name']} -> {response.status_code}")
+        logger.info(f"Event field: {field_name} -> {response.status_code}")
         if not response.ok:
-            logger.error(f"Failed to register event field: {field['name']} with payload {json.dumps(payload)} to {url}: {response.status_code} {response.text}")
+            logger.error(f"Failed to register event field: {field_name} with payload {json.dumps(payload)} to {url}: {response.status_code} {response.text}")
         assert response.ok, f"Failed to register event field: {response.text}"
-        new_fields.append(field["name"])
+        new_fields.append(field_name)
     return new_fields
 
 def post_new_event_mappings(mappings, base_url, tenant_id, new_fields):
@@ -151,6 +161,6 @@ if __name__ == "__main__":
     product_fields = load_variable("product_fields")
     mappings_data = load_mappings()
     post_new_customer_fields(customer_fields, base_url, tenant_id)
-    post_new_product_fields(product_fields, base_url, tenant_id)
+    # post_new_product_fields(product_fields, base_url, tenant_id)
     new_event_fields = post_new_event_fields(mappings_data["fields"], base_url, tenant_id)
     post_new_event_mappings(mappings_data["mappings"], base_url, tenant_id, new_event_fields)
