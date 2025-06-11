@@ -7,6 +7,15 @@
     "last_name": "VARCHAR_1000",
     "primary_id": "BIGINT"
   },
+  "product_fields": {
+    "product_id": "VARCHAR_1000",
+    "price": "DOUBLE",
+    "brand": "VARCHAR_1000",
+    "category": "VARCHAR_1000",
+    "color": "VARCHAR_1000",
+    "size": "VARCHAR_1000",
+    "type": "VARCHAR_1000"
+  },
   "event_fields": {
     "add_to_cart": {
       "event_type": "VARCHAR_1000",
@@ -14,29 +23,13 @@
       "product_id": "VARCHAR_1000",
       "quantity": "BIGINT",
       "user_id": "BIGINT",
-      "session_id": "VARCHAR_1000"
-    },
-    "search": {
-      "event_type": "VARCHAR_1000",
-      "primary_id": "BIGINT",
-      "user_id": "BIGINT",
-      "session_id": "VARCHAR_1000"
-    },
-    "purchase": {
-      "event_type": "VARCHAR_1000",
-      "primary_id": "BIGINT",
-      "product_id": "VARCHAR_1000",
-      "amount": "DOUBLE",
-      "quantity": "BIGINT",
-      "user_id": "BIGINT",
       "session_id": "VARCHAR_1000",
-      "items": "VARCHAR_1000"
-    },
-    "login": {
-      "event_type": "VARCHAR_1000",
-      "primary_id": "BIGINT",
-      "user_id": "BIGINT",
-      "session_id": "VARCHAR_1000"
+      "price": "DOUBLE",
+      "brand": "VARCHAR_1000",
+      "category": "VARCHAR_1000",
+      "color": "VARCHAR_1000",
+      "size": "VARCHAR_1000",
+      "type": "VARCHAR_1000"
     },
     "page_view": {
       "event_type": "VARCHAR_1000",
@@ -45,7 +38,35 @@
       "user_id": "BIGINT",
       "session_id": "VARCHAR_1000"
     },
+    "purchase": {
+      "event_type": "VARCHAR_1000",
+      "primary_id": "BIGINT",
+      "amount": "DOUBLE",
+      "quantity": "BIGINT",
+      "user_id": "BIGINT",
+      "session_id": "VARCHAR_1000",
+      "items": "VARCHAR_1000",
+      "product_id": "VARCHAR_1000",
+      "price": "DOUBLE",
+      "brand": "VARCHAR_1000",
+      "category": "VARCHAR_1000",
+      "color": "VARCHAR_1000",
+      "size": "VARCHAR_1000",
+      "type": "VARCHAR_1000"
+    },
+    "login": {
+      "event_type": "VARCHAR_1000",
+      "primary_id": "BIGINT",
+      "user_id": "BIGINT",
+      "session_id": "VARCHAR_1000"
+    },
     "logout": {
+      "event_type": "VARCHAR_1000",
+      "primary_id": "BIGINT",
+      "user_id": "BIGINT",
+      "session_id": "VARCHAR_1000"
+    },
+    "search": {
       "event_type": "VARCHAR_1000",
       "primary_id": "BIGINT",
       "user_id": "BIGINT",
@@ -54,55 +75,67 @@
   },
   "event_field_rules": {
     "add_to_cart": [
-      "primary_id",
+      "category",
       "session_id",
-      "quantity",
-      "device_type",
-      "product_id",
+      "size",
+      "brand",
       "platform",
-      "user_id"
+      "primary_id",
+      "price",
+      "color",
+      "product_id",
+      "user_id",
+      "device_type",
+      "quantity",
+      "type"
     ],
     "purchase": [
-      "primary_id",
-      "quantity",
-      "currency",
-      "payment_method",
-      "user_id",
+      "category",
       "session_id",
-      "amount",
+      "brand",
+      "platform",
+      "primary_id",
+      "color",
+      "product_id",
       "device_type",
       "items",
-      "product_id",
-      "platform"
+      "amount",
+      "quantity",
+      "type",
+      "currency",
+      "size",
+      "payment_method",
+      "price",
+      "user_id"
     ],
     "login": [
-      "primary_id",
       "session_id",
+      "user_id",
       "device_type",
       "platform",
-      "user_id"
+      "primary_id"
     ],
     "logout": [
-      "primary_id",
       "session_id",
+      "user_id",
       "device_type",
       "platform",
-      "user_id"
+      "primary_id"
     ],
     "page_view": [
-      "primary_id",
       "session_id",
+      "user_id",
       "device_type",
       "page_url",
       "platform",
-      "user_id"
+      "primary_id"
     ],
     "search": [
-      "primary_id",
       "session_id",
+      "user_id",
       "device_type",
       "platform",
-      "user_id"
+      "primary_id"
     ]
   }
 }

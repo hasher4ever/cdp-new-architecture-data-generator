@@ -75,3 +75,7 @@
 2025-06-09 19:14:10,044 curl -X POST 'http://10.0.10.140:30101/cdp-ignest/ingest/tenant/1749478057507/event' -H 'Content-Type: application/json' --data '{"event_type": "add_to_cart", "primary_id": 618895, "product_id": "bc501858-1425-4e3a-b1f8-e5217789ad56", "quantity": 1, "session_id": "012b5ca5-f042-4179-8a6f-640cf5d99c7d", "user_id": "618895"}'
 2025-06-09 19:14:10,155 curl -X POST 'http://10.0.10.140:30101/cdp-ignest/ingest/tenant/1749478057507/event' -H 'Content-Type: application/json' --data '{"event_type": "search", "primary_id": 165058, "session_id": null, "user_id": "165058"}'
 2025-06-09 19:14:10,270 curl -X POST 'http://10.0.10.140:30101/cdp-ignest/ingest/tenant/1749478057507/event' -H 'Content-Type: application/json' --data '{"event_type": "search", "primary_id": 705603, "session_id": "5ef0c73d-49ce-433f-a436-1b46beefd607", "user_id": "705603"}'
+2025-06-10 14:52:06,686 curl -X GET 'http://10.0.10.140:30100/api/tenants/1749478057507/info'
+2025-06-10 14:58:06,976 curl -X GET 'http://10.0.10.140:30100/api/tenants/1749478057507/info'
+2025-06-10 15:01:39,079 curl -X GET 'http://10.0.10.140:30100/api/tenants/1749478057507/info'
+2025-06-10 15:02:28,691 curl -X GET 'http://10.0.10.140:30100/api/tenants/1749478057507/info'

@@ -244,3 +244,65 @@
 2025-06-09 19:14:10,256 [INFO] Sending event: search (primary_id: 705603)
 2025-06-09 19:14:10,270 [INFO] Response [200]: 
 2025-06-09 19:14:10,371 [INFO] Completed sending events
+2025-06-10 14:52:06,631 [INFO] Loaded tenant_id: 1749478057507
+2025-06-10 14:52:06,657 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-10 14:52:06,687 [INFO] Fetched tenant schema
+2025-06-10 14:52:06,687 [INFO] Generating 200 products
+2025-06-10 14:52:06,688 [INFO] Generated 200 products
+2025-06-10 14:58:06,733 [INFO] Loaded tenant_id: 1749478057507
+2025-06-10 14:58:06,733 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-10 14:58:06,976 [INFO] Fetched tenant schema
+2025-06-10 14:58:06,976 [INFO] Generating 200 products
+2025-06-10 14:58:06,977 [INFO] Generated 200 products
+2025-06-10 14:58:06,978 [INFO] Writing data to products.csv
+2025-06-10 14:58:06,979 [INFO] Completed writing to products.csv
+2025-06-10 14:58:06,979 [INFO] Generating 1000 customers
+2025-06-10 14:58:07,085 [INFO] Generated 1000 customers
+2025-06-10 14:58:07,086 [INFO] Writing data to customers.csv
+2025-06-10 14:58:07,089 [INFO] Completed writing to customers.csv
+2025-06-10 14:58:07,089 [INFO] Generating 5000 events
+2025-06-10 14:58:07,395 [INFO] Generated 5000 events
+2025-06-10 14:58:07,397 [INFO] Writing data to events.csv
+2025-06-10 14:58:07,424 [INFO] Completed writing to events.csv
+2025-06-10 14:58:07,428 [INFO] Writing event mappings to event_mappings.json
+2025-06-10 14:58:07,429 [INFO] Completed writing to event_mappings.json
+2025-06-10 14:58:07,429 [INFO] Writing variables to variables.json
+2025-06-10 14:58:07,429 [INFO] Completed writing to variables.json
+2025-06-10 15:01:39,054 [INFO] Loaded tenant_id: 1749478057507
+2025-06-10 15:01:39,054 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-10 15:01:39,080 [INFO] Fetched tenant schema
+2025-06-10 15:01:39,080 [INFO] Generating 200 products
+2025-06-10 15:01:39,082 [INFO] Generated 200 products
+2025-06-10 15:01:39,082 [INFO] Writing data to products.csv
+2025-06-10 15:01:39,084 [INFO] Completed writing to products.csv
+2025-06-10 15:01:39,084 [INFO] Generating 1000 customers
+2025-06-10 15:01:39,198 [INFO] Generated 1000 customers
+2025-06-10 15:01:39,199 [INFO] Writing data to customers.csv
+2025-06-10 15:01:39,202 [INFO] Completed writing to customers.csv
+2025-06-10 15:01:39,202 [INFO] Generating 5000 events
+2025-06-10 15:01:39,553 [INFO] Generated 5000 events
+2025-06-10 15:01:39,555 [INFO] Writing data to events.csv
+2025-06-10 15:01:39,589 [INFO] Completed writing to events.csv
+2025-06-10 15:01:39,594 [INFO] Writing event mappings to event_mappings.json
+2025-06-10 15:01:39,595 [INFO] Completed writing to event_mappings.json
+2025-06-10 15:01:39,595 [INFO] Writing variables to variables.json
+2025-06-10 15:01:39,595 [INFO] Completed writing to variables.json
+2025-06-10 15:02:28,665 [INFO] Loaded tenant_id: 1749478057507
+2025-06-10 15:02:28,665 [INFO] Fetching tenant schema from http://10.0.10.140:30100/api/tenants/1749478057507/info
+2025-06-10 15:02:28,692 [INFO] Fetched tenant schema
+2025-06-10 15:02:28,692 [INFO] Generating 200 products
+2025-06-10 15:02:28,694 [INFO] Generated 200 products
+2025-06-10 15:02:28,694 [INFO] Writing data to products.csv
+2025-06-10 15:02:28,696 [INFO] Completed writing to products.csv
+2025-06-10 15:02:28,696 [INFO] Generating 1000 customers
+2025-06-10 15:02:28,837 [INFO] Generated 1000 customers
+2025-06-10 15:02:28,838 [INFO] Writing data to customers.csv
+2025-06-10 15:02:28,841 [INFO] Completed writing to customers.csv
+2025-06-10 15:02:28,841 [INFO] Generating 5000 events
+2025-06-10 15:02:29,211 [INFO] Generated 5000 events
+2025-06-10 15:02:29,212 [INFO] Writing data to events.csv
+2025-06-10 15:02:29,242 [INFO] Completed writing to events.csv
+2025-06-10 15:02:29,247 [INFO] Writing event mappings to event_mappings.json
+2025-06-10 15:02:29,247 [INFO] Completed writing to event_mappings.json
+2025-06-10 15:02:29,248 [INFO] Writing variables to variables.json
+2025-06-10 15:02:29,248 [INFO] Completed writing to variables.json

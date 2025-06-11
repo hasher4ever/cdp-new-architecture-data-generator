@@ -20,10 +20,33 @@ DEVICE_TYPES = ['mobile', 'desktop', 'tablet']
 PLATFORMS = ['web', 'iOS', 'Android']
 CURRENCIES = ['USD', 'EUR', 'RUB']
 PAYMENT_METHODS = ['credit_card', 'debit_card', 'paypal', 'bank_transfer']
+PRODUCT_BRANDS = {
+    'Clothing': ['Nike', 'Adidas', 'Puma', 'Zara', 'H&M'],
+    'Electronics': ['Apple', 'Samsung', 'Sony'],
+    'Books': ['Penguin', 'Random House'],
+    'Home': ['IKEA', 'West Elm'],
+    'Sports': ['Under Armour', 'Reebok']
+}
+PRODUCT_CATEGORIES = ['Clothing', 'Electronics', 'Books', 'Home', 'Sports']
+PRODUCT_TYPES = {
+    'Clothing': ['Shirt', 'Pants', 'Jacket', 'Dress', 'Shoes'],
+    'Electronics': ['Phone', 'Laptop', 'Headphones', 'Camera'],
+    'Books': ['Fiction', 'Non-Fiction', 'Textbook'],
+    'Home': ['Furniture', 'Decor', 'Appliance'],
+    'Sports': ['Equipment', 'Apparel', 'Accessories']
+}
+PRODUCT_COLORS = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow']
+PRODUCT_SIZES = {
+    'Clothing': ['XS', 'S', 'M', 'L', 'XL'],
+    'Electronics': ['N/A'],
+    'Books': ['N/A'],
+    'Home': ['Small', 'Medium', 'Large'],
+    'Sports': ['S', 'M', 'L']
+}
 
 EVENT_FIELD_RULES = {
-    "add_to_cart": {"primary_id", "quantity", "product_id", "user_id", "session_id", "device_type", "platform"},
-    "purchase": {"primary_id", "amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method"},
+    "add_to_cart": {"primary_id", "quantity", "product_id", "user_id", "session_id", "device_type", "platform", "price", "brand", "category", "color", "size", "type"},
+    "purchase": {"primary_id", "amount", "quantity", "product_id", "items", "user_id", "session_id", "device_type", "platform", "currency", "payment_method", "price", "brand", "category", "color", "size", "type"},
     "login": {"primary_id", "user_id", "session_id", "device_type", "platform"},
     "logout": {"primary_id", "user_id", "session_id", "device_type", "platform"},
     "page_view": {"primary_id", "page_url", "user_id", "session_id", "device_type", "platform"},
@@ -55,9 +78,19 @@ def get_tenant_schema(base_url, tenant_id):
         logger.error(f"Failed to fetch tenant schema: {response.status_code} {response.text}")
         raise Exception(f"Failed to fetch tenant schema: {response.status_code} {response.text}")
     data = response.json()
-    return data.get("customerFields", []), data.get("eventFields", [])
+    return data.get("customerFields", []), data.get("eventFields", []), data.get("productFields", [])
 
-customer_fields, event_fields = get_tenant_schema(config.BASE_URL_1, tenant_id)
+def write_csv_with_types(data, filename, fieldnames):
+    logger.info(f"Writing data to {filename}")
+    with open(filename, "w", newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in data:
+            string_row = {k: "" if v is None else str(v).lower() if isinstance(v, bool) else str(v) for k, v in row.items()}
+            writer.writerow(string_row)
+    logger.info(f"Completed writing to {filename}")
+
+customer_fields, event_fields, product_fields = get_tenant_schema(config.BASE_URL_1, tenant_id)
 logger.info("Fetched tenant schema")
 
 def generate_field_value(field, event_type=None):
@@ -90,6 +123,16 @@ def generate_field_value(field, event_type=None):
             return str(uuid.uuid4())
         elif field["name"] == "page_url":
             return fake.url()
+        elif field["name"] == "brand":
+            return random.choice(PRODUCT_BRANDS[random.choice(PRODUCT_CATEGORIES)])
+        elif field["name"] == "category":
+            return random.choice(PRODUCT_CATEGORIES)
+        elif field["name"] == "color":
+            return random.choice(PRODUCT_COLORS)
+        elif field["name"] == "size":
+            return random.choice(PRODUCT_SIZES[random.choice(PRODUCT_CATEGORIES)])
+        elif field["name"] == "type":
+            return random.choice(PRODUCT_TYPES[random.choice(PRODUCT_CATEGORIES)])
         elif field["name"] in ["device_type", "platform", "currency", "payment_method"]:
             return random.choice(DEVICE_TYPES if field["name"] == "device_type" else
                                  PLATFORMS if field["name"] == "platform" else
@@ -101,12 +144,48 @@ def generate_field_value(field, event_type=None):
         return fake.date_time_this_year(tzinfo=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
     elif field_type == "double":
+        if field["name"] == "price":
+            return round(random.uniform(10, 500), 2)
         return round(random.uniform(10, 500), 2)
 
     elif field_type == "boolean":
         return random.choice([True, False])
 
     raise ValueError(f"Unknown field type: {field_type}")
+
+# Generate products
+products = []
+product_ids = []
+product_field_types = {
+    "product_id": "VARCHAR_1000",
+    "price": "DOUBLE",
+    "brand": "VARCHAR_1000",
+    "category": "VARCHAR_1000",
+    "color": "VARCHAR_1000",
+    "size": "VARCHAR_1000",
+    "type": "VARCHAR_1000"
+}
+
+logger.info(f"Generating {NUM_PRODUCTS} products")
+for _ in range(NUM_PRODUCTS):
+    category = random.choice(PRODUCT_CATEGORIES)
+    product = {
+        "product_id": str(uuid.uuid4()),
+        "price": round(random.uniform(10, 500), 2),
+        "brand": random.choice(PRODUCT_BRANDS[category]),
+        "category": category,
+        "color": random.choice(PRODUCT_COLORS),
+        "size": random.choice(PRODUCT_SIZES[category]),
+        "type": random.choice(PRODUCT_TYPES[category])
+    }
+    products.append(product)
+    product_ids.append(product["product_id"])
+logger.info(f"Generated {len(products)} products")
+
+# Write products to CSV
+with open("products.csv", "w", newline='') as f:
+    fieldnames = list(product_field_types.keys())
+    write_csv_with_types(products, "products.csv", fieldnames)
 
 customers = []
 customer_ids = []
@@ -127,16 +206,6 @@ for _ in range(NUM_CUSTOMERS):
             customer_field_types[field["name"]] = field["type"].replace("boolean", "BOOL").replace("bigint", "BIGINT").replace(
                 "double", "DOUBLE").replace("varchar", "VARCHAR_1000").replace("date", "DATETIME").replace("datetime", "DATETIME")
 logger.info(f"Generated {len(customers)} customers")
-
-def write_csv_with_types(data, filename, fieldnames):
-    logger.info(f"Writing data to {filename}")
-    with open(filename, "w", newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in data:
-            string_row = {k: "" if v is None else str(v).lower() if isinstance(v, bool) else str(v) for k, v in row.items()}
-            writer.writerow(string_row)
-    logger.info(f"Completed writing to {filename}")
 
 with open("customers.csv", "w", newline='') as f:
     fieldnames = [f["name"] for f in customer_fields if f["name"] != "created_at"]
@@ -162,11 +231,27 @@ def generate_event_data(event_name, user_id):
             if value is not None or not field["nullable"]:
                 event[field["name"]] = value
 
-    if event_name == "add_to_cart":
-        event.update({"quantity": random.randint(1, 5), "product_id": str(uuid.uuid4())})
-    elif event_name == "purchase":
-        items = [str(uuid.uuid4()) for _ in range(random.randint(1, 3))]
-        event.update({"amount": round(random.uniform(50, 1000), 2), "quantity": len(items), "product_id": items[0], "items": ";".join(items)})
+    if event_name in ["add_to_cart", "purchase"]:
+        product = random.choice(products)
+        event.update({
+            "product_id": product["product_id"],
+            "price": product["price"],
+            "brand": product["brand"],
+            "category": product["category"],
+            "color": product["color"],
+            "size": product["size"],
+            "type": product["type"]
+        })
+        if event_name == "add_to_cart":
+            event["quantity"] = random.randint(1, 5)
+        elif event_name == "purchase":
+            items = [random.choice(products)["product_id"] for _ in range(random.randint(1, 3))]
+            event.update({
+                "quantity": len(items),
+                "amount": round(sum(p["price"] for p in products if p["product_id"] in items), 2),
+                "items": ";".join(items)
+            })
+
     elif event_name == "page_view":
         event.update({"page_url": fake.url()})
 
@@ -204,8 +289,8 @@ for event in events:
             event_mappings[event_name].add(key)
 
 event_field_types["purchase"]["items"] = "VARCHAR_1000"
-if "primary_id" not in event_field_types.get("purchase", {}):
-    for event_type in EVENT_TYPES:
+for event_type in EVENT_TYPES:
+    if "primary_id" not in event_field_types.get(event_type, {}):
         event_field_types[event_type]["primary_id"] = "BIGINT"
 
 field_definitions = []
@@ -225,6 +310,7 @@ logger.info("Completed writing to event_mappings.json")
 
 variables = {
     "customer_fields": customer_field_types,
+    "product_fields": product_field_types,
     "event_fields": event_field_types,
     "event_field_rules": {event: list(fields) for event, fields in EVENT_FIELD_RULES.items()}
 }
