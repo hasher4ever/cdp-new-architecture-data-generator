@@ -32,7 +32,7 @@ PRODUCT_COLORS = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow']
 PRODUCT_SIZES = {
     'Clothing': ['XS', 'S', 'M', 'L', 'XL'],
     'Electronics': ['N/A'],
-    'Books': ['N/A'],
+    'Books': ['Hardcover', 'Softcover'],
     'Home': ['Small', 'Medium', 'Large'],
     'Sports': ['S', 'M', 'L']
 }

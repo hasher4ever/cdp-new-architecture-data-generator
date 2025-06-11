@@ -9,7 +9,7 @@ from utils import (logger, fake, config, get_tenant_schema, write_csv_with_types
                   PRODUCT_BRANDS, PRODUCT_CATEGORIES, PRODUCT_COLORS, PRODUCT_SIZES, PRODUCT_TYPES,
                   EVENT_FIELD_RULES)
 
-NUM_EVENTS = 500
+NUM_EVENTS = 70000
 
 with open("tenant.json", "r", encoding="utf-8") as f:
     tenant_id = json.load(f)["tenant_id"]
@@ -17,12 +17,17 @@ logger.info(f"Loaded tenant_id: {tenant_id}")
 
 with open("product_data.json", "r", encoding="utf-8") as f:
     product_data = json.load(f)
-    with open("products.csv", "r", encoding="utf-8") as csvfile:
-        reader = csv.DictReader(csvfile)
-        first_row = next(reader)  # Get the first row
-        products = [{"product_id": pid, **{k: v for k, v in first_row.items() if k != "product_id"}}
-                   for pid in product_data["product_ids"]]
+
+# Read all rows from the products.csv file
+with open("products.csv", "r", encoding="utf-8") as csvfile:
+    reader = csv.DictReader(csvfile)
+    products = [row for row in reader]  # Create a list of all rows
+
+# Ensure that each product has the correct product_id from product_data
+products = [{**product, "product_id": pid} for product, pid in zip(products, product_data["product_ids"])]
+
 product_ids = product_data["product_ids"]
+
 
 with open("customer_data.json", "r", encoding="utf-8") as f:
     customer_data = json.load(f)
@@ -90,6 +95,7 @@ def generate_field_value(field, event_type=None):
 def generate_event_data(event_name, user_id):
     event = {"event_type": event_name, "primary_id": user_id}
     allowed_fields = EVENT_FIELD_RULES.get(event_name, set())
+
     for field in event_fields:
         if field["name"] in ["created_at", "offset", "partition_id"] and field["flags"]["tableBuildIn"]:
             continue
@@ -104,9 +110,20 @@ def generate_event_data(event_name, user_id):
             if value is not None or not field["nullable"]:
                 event[field["name"]] = value
 
-    if event_name in ["add_to_cart", "purchase"]:
+    if event_name == "search":
+        search_query = random.choice(PRODUCT_BRANDS[random.choice(PRODUCT_CATEGORIES)]) + " " + fake.word()
+        event["search_query"] = search_query
+
+        match_status = random.choices(["match", "no_match"], weights=[0.95, 0.05])[0]
+        event["match_status"] = match_status
+
+        if match_status == "match":
+            matching_products = random.sample(product_ids, min(3, len(product_ids)))
+            event["matching_product_ids"] = ";".join(matching_products)
+
+    elif event_name in ["add_to_cart", "purchase"]:
         product = random.choice(products)
-        price = round(float(product["price"]), 2)  # Ensure price is float
+        price = round(float(product["price"]), 2)
         event.update({
             "product_id": product["product_id"],
             "price": price,
@@ -123,12 +140,28 @@ def generate_event_data(event_name, user_id):
             items = [random.choice(products) for _ in range(quantity)]
             event.update({
                 "quantity": quantity,
-                "amount": round(sum(float(p["price"]) * quantity for p in items) / quantity, 2),  # Average price * quantity
+                "amount": round(sum(float(p["price"]) for p in items), 2),
                 "items": ";".join(p["product_id"] for p in items)
             })
 
     elif event_name == "page_view":
-        event.update({"page_url": fake.url()})
+        page_type = random.choices(
+            ["product", "category", "cart", "about", "home"],
+            weights=[0.5, 0.2, 0.1, 0.1, 0.1]
+        )[0]
+
+        if page_type == "product":
+            product = random.choice(products)
+            event.update({"page_url": f"/products/{product['product_id']}"})
+        elif page_type == "category":
+            category = random.choice(PRODUCT_CATEGORIES)
+            event.update({"page_url": f"/categories/{category}"})
+        elif page_type == "cart":
+            event.update({"page_url": "/cart"})
+        elif page_type == "about":
+            event.update({"page_url": "/about"})
+        elif page_type == "home":
+            event.update({"page_url": "/home"})
 
     return event
 

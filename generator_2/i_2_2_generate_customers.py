@@ -5,7 +5,7 @@ from faker import Faker
 from utils import logger, get_tenant_schema, write_csv_with_types, config
 
 fake = Faker()
-NUM_CUSTOMERS = 100
+NUM_CUSTOMERS = 30000
 
 with open("tenant.json", "r", encoding="utf-8") as f:
     tenant_id = json.load(f)["tenant_id"]

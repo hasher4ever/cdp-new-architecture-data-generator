@@ -3,7 +3,7 @@ import random
 import json
 from utils import logger, PRODUCT_BRANDS, PRODUCT_CATEGORIES, PRODUCT_COLORS, PRODUCT_SIZES, PRODUCT_TYPES, write_csv_with_types
 
-NUM_PRODUCTS = 200
+NUM_PRODUCTS = 500
 
 # Generate products
 products = []
